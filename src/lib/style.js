@@ -38,6 +38,8 @@ export const core = {
   textLeft: `text-align: left`,
   textCenter: `text-align: center`,
   textRight: `text-align: right`,
+  animOpacity: `transition: opacity 0.2s ease-in-out`,
+  animShadow: `transition: box-shadow 0.2s ease-in-out`,
 }
 
 export const generated = {
@@ -87,6 +89,9 @@ export const generated = {
   })),
   zIndex: generate(array(21), (i) => ({
     [`zi${i}`]: `z-index: ${i}`,
+  })),
+  opacity: generate(array(21), (i) => ({
+    [`o${i * 5}`]: `opacity: ${(i * 5) / 100}`,
   })),
 }
 

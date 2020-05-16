@@ -1,0 +1,22 @@
+.wrapper {
+  box-shadow: 0px 30px 35px -20px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.wrapper-open {
+  box-shadow: 0px 30px 35px -26px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.wrapper:hover {
+  box-shadow: 0px 30px 35px -20px rgba(0, 0, 0, 0.15);
+}
+
+.checkbox {
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.1),
+    -4px -4px 7px rgba(255, 255, 255, 0.7);
+}
+
+.ingredient:hover .check-dot {
+  opacity: 0.4;
+}

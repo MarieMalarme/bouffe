@@ -7,6 +7,7 @@
 body {
   font-size: 15px;
   font-family: 'GTZirkon';
+  background: var(--grey9);
 }
 
 @font-face {
