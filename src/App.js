@@ -35,7 +35,7 @@ const App = () => {
   return (
     <Div pa100>
       {recipes.map((recipe) => (
-        <Recipe recipe={recipe} />
+        <Recipe key={recipe.title} recipe={recipe} />
       ))}
     </Div>
   )
@@ -69,8 +69,12 @@ const Ingredients = ({ ingredients }) => (
       Ingredients
     </Div>
     <Div>
-      {ingredients.map(({ ingredient, measure }) => (
-        <Ingredient ingredient={ingredient} measure={measure} />
+      {ingredients.map(({ ingredient, measure }, i) => (
+        <Ingredient
+          key={`${ingredient}-${i}`}
+          ingredient={ingredient}
+          measure={measure}
+        />
       ))}
     </Div>
   </Div>
