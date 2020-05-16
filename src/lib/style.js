@@ -21,7 +21,9 @@ import {
 
 export const core = {
   heading: `font-family: 'Murmure'`,
+  current: `font-family: 'GTZirkon'`,
   mono: `font-family: 'SpaceMono'`,
+  italic: `font-style: italic`,
   flexColumn: `flex-direction: column`,
   flexRow: `flex-direction: row`,
   bRad50p: `border-radius: 50%`,

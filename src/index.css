@@ -5,13 +5,25 @@
 }
 
 body {
-  font-size: 13px;
-  font-family: 'SpaceMono';
+  font-size: 15px;
+  font-family: 'GTZirkon';
 }
 
 @font-face {
   font-family: 'Murmure';
   src: url('./fonts/Murmure.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'GTZirkon';
+  src: url('./fonts/GTZirkonUltraLight.otf') format('opentype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GTZirkon';
+  src: url('./fonts/GTZirkonUltraLightItalic.otf') format('opentype');
+  font-style: italic;
 }
 
 @font-face {
