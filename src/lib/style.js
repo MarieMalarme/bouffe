@@ -28,6 +28,7 @@ export const core = {
   flexRow: `flex-direction: row`,
   bRad50p: `border-radius: 50%`,
   w100vw: `width: 100vw`,
+  wThird: `width: calc(100% / 3)`,
   h100vh: `height: 100vh`,
   fs100: `font-size: 100px`,
   noDecoration: `text-decoration: none`,
@@ -40,6 +41,7 @@ export const core = {
   textRight: `text-align: right`,
   animOpacity: `transition: opacity 0.2s ease-in-out`,
   animShadow: `transition: box-shadow 0.2s ease-in-out`,
+  anim: `transition: all 0.2s ease-in-out`,
 }
 
 export const generated = {
@@ -47,7 +49,7 @@ export const generated = {
   backgroundColor: generate(colors, ([color]) => ({
     [`bg${capitalize(color)}`]: `background-color: var(--${color})`,
   })),
-  fontSize: generate(array(31), (i) => ({
+  fontSize: generate(array(51), (i) => ({
     [`fs${i + 10}`]: `font-size: ${i + 10}px`,
   })),
   margin: { ...pixelateDirections('margin'), ...pixelateAxis('margin') },

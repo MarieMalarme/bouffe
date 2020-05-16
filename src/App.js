@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 
 import { Component, Div, Span } from './lib/design.js'
 
@@ -17,67 +17,92 @@ const App = () => {
 }
 
 const Recipe = ({ recipe }) => {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const { title, ingredients, steps } = recipe
-  const className = open ? 'wrapper-open' : 'wrapper'
+  const className = open ? 'wrapper-open' : 'wrapper-closed'
+  const ref = useRef(null)
+  const height = ref.current && ref.current.getBoundingClientRect().height
 
   return (
-    <Wrapper className={className} pb100={open} pb25={!open}>
+    <Wrapper className={className} pb70={open}>
       <Tab onClick={() => setOpen(!open)}>
         <Title>{title}</Title>
         <Div fs12 mono>
           {open ? '— Close' : '+ Open'}
         </Div>
       </Tab>
-      {open && <Ingredients ingredients={ingredients} />}
+      <Content
+        o0={!open}
+        o100={open}
+        style={{
+          overflow: open ? 'visible' : 'hidden',
+          maxHeight: open ? height : 0,
+          marginLeft: '-10px',
+        }}
+      >
+        <div ref={ref}>
+          <Ingredients ingredients={ingredients} />
+          <Steps steps={steps} />
+        </div>
+      </Content>
     </Wrapper>
   )
 }
 
-const Wrapper = Component.bGrey6.w100p.mb30.animShadow.div()
-const Title = Component.fs40.heading.mr20.div()
+const Wrapper = Component.bGrey6.w100p.mb30.animShadow.pb25.div()
+const Title = Component.fs60.heading.mr20.div()
 const Tab = Component.flex.alignBaseline.pointer.div()
+const Content = Component.fs20.anim.pl10.div()
 
-const Ingredients = ({ ingredients }) => (
-  <Div mt50 fs20>
-    <Div mb30 pb10>
-      Ingredients
-    </Div>
-    <Div>
-      {ingredients.map(({ ingredient, measure }, i) => (
-        <Ingredient
-          key={`${ingredient}-${i}`}
-          ingredient={ingredient}
-          measure={measure}
-        />
-      ))}
-    </Div>
+const Steps = ({ steps }) => (
+  <Div mt45 fs35>
+    {steps.map((step, i) => (
+      <Step key={`step-${i}`} step={step} number={i + 1} />
+    ))}
   </Div>
 )
 
-const Ingredient = ({ ingredient, measure }) => {
+const Step = ({ step, number }) => (
+  <Div flex alignCenter mb25>
+    <StepNumber>{number}</StepNumber>
+    {step}.
+  </Div>
+)
+
+const StepNumber = Component.grey7.o80.w35.mr10.div()
+
+const Ingredients = ({ ingredients }) => (
+  <Div pt70 flex flexWrap>
+    {ingredients.map(({ ingredient, quantity }, i) => (
+      <Ingredient
+        key={`${ingredient}`}
+        ingredient={ingredient}
+        quantity={quantity}
+      />
+    ))}
+  </Div>
+)
+
+const Ingredient = ({ ingredient, quantity }) => {
   const [checked, setChecked] = useState(false)
   return (
-    <Div
+    <CheckIngredient
       className="ingredient"
-      pointer
       onClick={() => setChecked(!checked)}
-      flex
-      alignCenter
-      mb25
     >
       <Checkbox className="checkbox">
         <CheckDot className={!checked ? 'check-dot' : ''} o100={checked} />
       </Checkbox>
       {ingredient}
       <Span ml10 grey5 italic>
-        {measure}
+        {quantity}
       </Span>
-    </Div>
+    </CheckIngredient>
   )
 }
 
-const Checkbox = Component.mr20.bRad50p.w20.h20.flex.alignCenter.justifyCenter.bgGrey9.div()
+const CheckIngredient = Component.w25p.pr15.flex.alignCenter.mb25.pointer.div()
+const Checkbox = Component.mr20.bRad50p.w25.h25.fs12.flex.alignCenter.justifyCenter.bgGrey9.div()
 const CheckDot = Component.bRad50p.w5.h5.bgGrey2.animOpacity.o0.div()
 
 export default App
