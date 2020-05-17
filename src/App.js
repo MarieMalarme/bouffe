@@ -9,12 +9,40 @@ import './App.css'
 const App = () => {
   return (
     <Div pa100>
+      <Filters />
       {recipes.map((recipe) => (
         <Recipe key={recipe.title} recipe={recipe} />
       ))}
     </Div>
   )
 }
+
+const filters = ['Salty', 'Sweet', 'Meat', 'Vegetarian', 'Asian', 'French']
+
+const Filters = ({}) => (
+  <Div flex mb50>
+    {filters.map((filter, i) => (
+      <Filter name={filter} />
+    ))}
+  </Div>
+)
+
+const Filter = ({ name, isSelected = false }) => {
+  const [selected, setSelected] = useState(isSelected)
+  return (
+    <Shape
+      bgGrey1={selected}
+      white={selected}
+      grey5={!selected}
+      bgGrey9={!selected}
+      hoverBlack={!selected}
+      onClick={() => setSelected(!selected)}
+    >
+      {name}
+    </Shape>
+  )
+}
+const Shape = Component.bRad20.anim.pointer.mb40.mr25.fs16.ph20.pv10.shadowOut.div()
 
 const Recipe = ({ recipe }) => {
   const [open, setOpen] = useState(false)
@@ -90,7 +118,7 @@ const Ingredient = ({ ingredient, quantity }) => {
       className="ingredient"
       onClick={() => setChecked(!checked)}
     >
-      <Checkbox className="checkbox">
+      <Checkbox>
         <CheckDot className={!checked ? 'check-dot' : ''} o100={checked} />
       </Checkbox>
       {ingredient}
@@ -102,7 +130,7 @@ const Ingredient = ({ ingredient, quantity }) => {
 }
 
 const CheckIngredient = Component.w25p.pr15.flex.alignCenter.mb25.pointer.div()
-const Checkbox = Component.mr20.bRad50p.w25.h25.fs12.flex.alignCenter.justifyCenter.bgGrey9.div()
+const Checkbox = Component.mr20.bRad50p.w25.h25.fs12.flex.alignCenter.justifyCenter.bgGrey9.shadowIn.div()
 const CheckDot = Component.bRad50p.w5.h5.bgGrey2.animOpacity.o0.div()
 
 export default App
