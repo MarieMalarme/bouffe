@@ -2,14 +2,28 @@ import React, { useState, useRef } from 'react'
 
 import { Component, Div, Span } from './lib/design.js'
 
-import { recipes } from './recipes.data.js'
+import { recipes as all } from './recipes.data.js'
 
 import './App.css'
 
 const App = () => {
+  const [selected, setSelected] = useState([])
+
+  const filtered = all.filter((recipe) => {
+    if (!recipe.tags) return false
+    for (const s of selected) {
+      if (recipe.tags.includes(s)) {
+        return true
+      }
+    }
+    return false
+  })
+
+  const recipes = selected.length ? filtered : all
+
   return (
     <Div pa100>
-      <Filters />
+      <Filters selected={selected} setSelected={setSelected} />
       {recipes.map((recipe) => (
         <Recipe key={recipe.title} recipe={recipe} />
       ))}
@@ -19,29 +33,41 @@ const App = () => {
 
 const filters = ['Salty', 'Sweet', 'Meat', 'Vegetarian', 'Asian', 'French']
 
-const Filters = ({}) => (
+const Filters = ({ selected, setSelected }) => (
   <Div flex mb50>
     {filters.map((filter, i) => (
-      <Filter name={filter} />
+      <Filter
+        key={filter}
+        name={filter}
+        selected={selected}
+        setSelected={setSelected}
+      />
     ))}
   </Div>
 )
 
-const Filter = ({ name, isSelected = false }) => {
-  const [selected, setSelected] = useState(isSelected)
+const Filter = ({ name, isSelected = false, selected, setSelected }) => {
+  const [active, setActive] = useState(isSelected)
+
   return (
     <Shape
-      bgGrey1={selected}
-      white={selected}
-      grey5={!selected}
-      bgGrey9={!selected}
-      hoverBlack={!selected}
-      onClick={() => setSelected(!selected)}
+      bgGrey1={active}
+      white={active}
+      grey5={!active}
+      bgGrey9={!active}
+      hoverBlack={!active}
+      onClick={() => {
+        setActive(!active)
+        selected.includes(name)
+          ? setSelected(selected.filter((f) => f !== name))
+          : setSelected([...selected, name])
+      }}
     >
       {name}
     </Shape>
   )
 }
+
 const Shape = Component.bRad20.anim.pointer.mb40.mr25.fs16.ph20.pv10.shadowOut.div()
 
 const Recipe = ({ recipe }) => {
