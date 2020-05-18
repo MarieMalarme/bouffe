@@ -22,7 +22,7 @@ const App = () => {
   const recipes = selected.length ? filtered : all
 
   return (
-    <Div pa100>
+    <Div ph100 pb100 pt30>
       <Filters selected={selected} setSelected={setSelected} />
       {recipes.map((recipe) => (
         <Recipe key={recipe.title} recipe={recipe} />
@@ -34,7 +34,7 @@ const App = () => {
 const filters = ['Salty', 'Sweet', 'Meat', 'Vegetarian', 'Asian', 'French']
 
 const Filters = ({ selected, setSelected }) => (
-  <Div flex mb50>
+  <Bar className="gradient-bg">
     {filters.map((filter, i) => (
       <Filter
         key={filter}
@@ -43,8 +43,10 @@ const Filters = ({ selected, setSelected }) => (
         setSelected={setSelected}
       />
     ))}
-  </Div>
+  </Bar>
 )
+
+const Bar = Component.flex.flexWrap.sticky.pb60.pt80.t0.mb20.w100p.div()
 
 const Filter = ({ name, isSelected = false, selected, setSelected }) => {
   const [active, setActive] = useState(isSelected)
@@ -68,7 +70,7 @@ const Filter = ({ name, isSelected = false, selected, setSelected }) => {
   )
 }
 
-const Shape = Component.bRad20.anim.pointer.mb40.mr25.fs16.ph20.pv10.shadowOut.div()
+const Shape = Component.bRad20.anim.mb25.pointer.mr25.fs16.ph20.pv10.shadowOut.div()
 
 const Recipe = ({ recipe }) => {
   const [open, setOpen] = useState(false)
