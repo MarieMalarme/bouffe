@@ -152,13 +152,13 @@ const Steps = ({ steps }) => (
 )
 
 const Step = ({ step, number }) => (
-  <Div flex alignCenter mb25>
+  <Div flex alignBaseline mb25>
     <StepNumber>{number}</StepNumber>
     {step}.
   </Div>
 )
 
-const StepNumber = Component.grey7.o80.w35.mr10.div()
+const StepNumber = Component.grey7.w35.mr10.div()
 
 const Ingredients = ({ ingredients }) => (
   <Div pt70 flex flexWrap>

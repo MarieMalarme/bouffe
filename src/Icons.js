@@ -18,10 +18,10 @@ export const Oven = (props) => (
 
 export const Serving = (props) => (
   <Icon {...props}>
-    <circle cx="31.48" cy="33.05" r="19" />
-    <circle cx="98.52" cy="33.05" r="19" />
-    <circle cx="31.48" cy="96.95" r="19" />
-    <circle cx="98.52" cy="96.95" r="19" />
+    <circle cx="35" cy="35" r="17" />
+    <circle cx="95" cy="35" r="17" />
+    <circle cx="35" cy="95" r="17" />
+    <circle cx="95" cy="95" r="17" />
   </Icon>
 )
 
