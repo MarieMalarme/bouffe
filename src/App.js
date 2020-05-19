@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 
 import { Component, Div, Span } from './lib/design.js'
+import { Clock, Oven, Serving } from './Icons.js'
 
 import { recipes as all } from './recipes.data.js'
 
@@ -74,7 +75,7 @@ const Shape = Component.bRad20.anim.mb25.pointer.mr25.fs16.ph20.pv10.shadowOut.d
 
 const Recipe = ({ recipe }) => {
   const [open, setOpen] = useState(false)
-  const { title, ingredients, steps } = recipe
+  const { title, ingredients, steps, specs } = recipe
   const className = open ? 'wrapper-open' : 'wrapper-closed'
   const ref = useRef(null)
   const height = ref.current && ref.current.getBoundingClientRect().height
@@ -82,10 +83,11 @@ const Recipe = ({ recipe }) => {
   return (
     <Wrapper className={className} pb70={open}>
       <Tab onClick={() => setOpen(!open)}>
-        <Title>{title}</Title>
-        <Div fs12 mono>
-          {open ? '— Close' : '+ Open'}
+        <Div flex alignBaseline>
+          <Title>{title}</Title>
+          <Collapse open={open} />
         </Div>
+        <Specs specs={specs} />
       </Tab>
       <Content
         o0={!open}
@@ -105,10 +107,41 @@ const Recipe = ({ recipe }) => {
   )
 }
 
+const Collapse = ({ open }) => (
+  <Div fs12 mono>
+    {open ? '— Close' : '+ Open'}
+  </Div>
+)
+
 const Wrapper = Component.bGrey6.w100p.mb30.animShadow.pb25.div()
 const Title = Component.fs60.heading.mr20.div()
-const Tab = Component.flex.alignBaseline.pointer.div()
+const Tab = Component.flex.justifyBetween.alignCenter.pointer.div()
 const Content = Component.fs20.anim.pl10.div()
+
+const Specs = ({ specs }) => {
+  if (!specs) return null
+  return (
+    <Div flex alignCenter justifyFlexEnd w50p mr20>
+      {Object.entries(specs).map(([key, spec]) => (
+        <Spec key={key} type={key} spec={spec} />
+      ))}
+    </Div>
+  )
+}
+
+const Spec = ({ type, spec }) => {
+  if (!spec) return null
+  const serving = type === 'serving'
+  const time = type === 'time'
+  const temp = type === 'temp'
+  const Icon = (time && Clock) || (temp && Oven) || (serving && Serving)
+  return (
+    <Div flex alignCenter mr20={!serving} w110={temp} w120={time}>
+      <Icon mr10 />
+      <Div fs18>{spec}</Div>
+    </Div>
+  )
+}
 
 const Steps = ({ steps }) => (
   <Div mt45 fs35>
