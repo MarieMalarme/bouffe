@@ -50,9 +50,16 @@ export const core = {
     inset 0px 0px 0px rgba(255, 255, 255, 0.6), 
     3px 3px 7px rgba(0, 0, 0, 0.1),
     -4px -4px 7px rgba(255, 255, 255, 0.7)`,
+  noEvents: `pointer-events: none`,
+  noSelect: `user-select: none`,
 }
 
 const suffixed = [
+  {
+    selector: `hoverShadow`,
+    suffix: `:hover`,
+    rule: `box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);`,
+  },
   {
     selector: `hoverO0`,
     suffix: `:hover`,

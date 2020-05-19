@@ -25,10 +25,23 @@ export const Serving = (props) => (
   </Icon>
 )
 
-const Icon = ({ path, width = 25, children }) => (
-  <Div flex alignCenter justifyCenter mr15>
+export const Plus = (props) => (
+  <Icon {...props}>
+    <path d="M65 15v100M115 65H15" />
+  </Icon>
+)
+
+const Icon = ({
+  path,
+  width = 25,
+  stroke = 'black',
+  strokeWidth = 3,
+  children,
+  ...props
+}) => (
+  <Div flex alignCenter justifyCenter {...props}>
     <svg width={width} viewBox="0 0 130 130">
-      <g fill="none" stroke="black" strokeWidth={3}>
+      <g fill="none" stroke={stroke} strokeWidth={strokeWidth}>
         {children}
       </g>
     </svg>
