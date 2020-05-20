@@ -113,7 +113,7 @@ export const generated = {
   cursor: generate(cursors, (c) => ({
     [c]: `cursor: ${toDashCase(c)}`,
   })),
-  lineHeight: generate(array(41), (i) => ({
+  lineHeight: generate(array(71), (i) => ({
     [`lh${i + 10}`]: `line-height: ${i + 10}px`,
   })),
   whiteSpace: generate(whiteSpaces, (w) => ({

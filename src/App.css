@@ -31,7 +31,3 @@
   position: absolute;
   pointer-events: none;
 }
-
-.new-button:hover .new-text {
-  opacity: 1;
-}
