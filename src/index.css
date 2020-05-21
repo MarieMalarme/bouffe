@@ -31,3 +31,14 @@ body {
   font-family: 'SpaceMono';
   src: url('./fonts/SpaceMono.ttf') format('truetype');
 }
+
+input {
+  outline: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+input::placeholder {
+  color: var(--grey7);
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { Div } from './lib/design.js'
-import { Navigation } from './Navigation.js'
+import { Controls } from './Controls.js'
 import { Recipes } from './Recipes.js'
 
 import { recipes as all } from './recipes.data.js'
@@ -25,7 +25,7 @@ const App = () => {
 
   return (
     <Div ph100 pb100 pt30>
-      <Navigation selected={selected} setSelected={setSelected} />
+      <Controls selected={selected} setSelected={setSelected} />
       <Recipes recipes={recipes} />
     </Div>
   )

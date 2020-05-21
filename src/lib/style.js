@@ -32,6 +32,7 @@ export const core = {
   h100vh: `height: 100vh`,
   fs100: `font-size: 100px`,
   noDecoration: `text-decoration: none`,
+  bgNone: `background: none`,
   t0: `top: 0`,
   r0: `right: 0`,
   b0: `bottom: 0`,
