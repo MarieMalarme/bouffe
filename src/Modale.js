@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useElement } from 'use-element'
-import { key } from './lib/toolbox.js'
+import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
+import { Filters } from './Filters.js'
+import { NumberInput, TextInput } from './Inputs.js'
 
-const steps = ['Title', 'Time', 'Ingredients', 'Steps']
+const steps = [
+  { name: 'title', content: 'text' },
+  { name: 'time', content: 'number', placeholder: 30 },
+  { name: 'tags', content: Filters },
+  // { name: 'ingredients', content: 'bullet' },
+  // { name: 'steps', content: 'list' },
+]
 
 export const Modale = ({ event, setEvent }) => {
   const clicked = event === 'click'
@@ -49,7 +57,7 @@ const Form = ({ steps, setEvent }) => {
       }}
     >
       {steps.map((step, i) => (
-        <Step key={step} step={step} current={current} />
+        <Step key={step.name} step={step} current={current} />
       ))}
       <Navigation justifyBetween={!first} justifyFlexEnd={first}>
         <Button display={!first} action={prev} text="Back" />
@@ -65,7 +73,7 @@ const Steps = Component.flex.flexColumn.justifyBetween.div()
 const Button = ({ display, action, text }) => {
   if (!display) return null
   return (
-    <Div pointer onClick={action}>
+    <Div noSelect pointer onClick={action}>
       {text}
     </Div>
   )
@@ -80,22 +88,28 @@ const Step = ({ step, current }) => {
     elem && elem.focus()
   })
 
+  const { name, content, placeholder } = step
+
+  const text = content === 'text'
+  const number = content === 'number'
+
+  const Content = (text && TextInput) || (number && NumberInput) || content
+
   return (
-    <Div hidden={step !== current}>
-      <Div className="fade-in" heading fs60>
-        {step}
+    <Div hidden={name !== current.name}>
+      <Div className="fade-in" fixed heading fs60>
+        {capitalize(name)}
       </Div>
-      <Input
-        type="text"
-        name={step}
-        elemRef={ref}
-        placeholder={`Give me some ${step}`}
-      />
+      <Div mt160>
+        <Content
+          name={name}
+          elemRef={ref}
+          placeholder={placeholder || `Gimme some ${name}`}
+        />
+      </Div>
     </Div>
   )
 }
-
-const Input = Component.w75p.pb15.mt100.fs40.current.bgNone.bb.input()
 
 const Hovered = () => (
   <Div>
