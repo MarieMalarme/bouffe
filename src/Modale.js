@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useElement } from 'use-element'
 import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
@@ -83,10 +82,11 @@ const Button = ({ display, action, text }) => {
 const Navigation = Component.flex.alignCenter.w100p.fixed.b0.r0.pa100.div()
 
 const Step = ({ step, current }) => {
-  const [ref, elem] = useElement(null)
+  const [ref, setRef] = useState()
 
   useEffect(() => {
-    elem && elem.focus()
+    if (!ref) return
+    ref.focus()
   })
 
   const { name, content, placeholder, required } = step
@@ -104,7 +104,7 @@ const Step = ({ step, current }) => {
       <Div mt160>
         <Content
           name={name}
-          elemRef={ref}
+          elemRef={setRef}
           required={required}
           placeholder={placeholder || `Gimme some ${name}`}
         />
