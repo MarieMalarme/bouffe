@@ -7,7 +7,7 @@ import { Filters } from './Filters.js'
 import { NumberInput, TextInput } from './Inputs.js'
 
 const steps = [
-  { name: 'title', content: 'text' },
+  { name: 'title', content: 'text', required: true },
   { name: 'time', content: 'number', placeholder: 30 },
   { name: 'tags', content: Filters },
   // { name: 'ingredients', content: 'bullet' },
@@ -49,6 +49,7 @@ const Form = ({ steps, setEvent }) => {
 
   return (
     <Steps
+      autoComplete="off"
       onKeyDown={(e) => {
         const { enter, backspace, esc } = key(e)
         if (enter) last ? clear() : next()
@@ -68,7 +69,7 @@ const Form = ({ steps, setEvent }) => {
   )
 }
 
-const Steps = Component.flex.flexColumn.justifyBetween.div()
+const Steps = Component.flex.flexColumn.justifyBetween.form()
 
 const Button = ({ display, action, text }) => {
   if (!display) return null
@@ -88,7 +89,7 @@ const Step = ({ step, current }) => {
     elem && elem.focus()
   })
 
-  const { name, content, placeholder } = step
+  const { name, content, placeholder, required } = step
 
   const text = content === 'text'
   const number = content === 'number'
@@ -104,6 +105,7 @@ const Step = ({ step, current }) => {
         <Content
           name={name}
           elemRef={ref}
+          required={required}
           placeholder={placeholder || `Gimme some ${name}`}
         />
       </Div>

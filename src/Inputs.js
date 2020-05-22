@@ -3,9 +3,21 @@ import React, { useState } from 'react'
 import { Component, Div } from './lib/design.js'
 import { Minus, Plus } from './Icons.js'
 
-const TextInputStyle = Component.current.bgNone.pb15.bb.fs40.w75p.input()
-export const TextInput = ({ name, ...props }) => {
-  return <TextInputStyle type="text" name={name} {...props} />
+const TextInputStyle = Component.current.bgNone.pb15.bb.fs40.w100p.input()
+export const TextInput = ({ name, required = false, ...props }) => {
+  const [value, setValue] = useState('')
+  return (
+    <Div w75p>
+      <TextInputStyle
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        type="text"
+        name={name}
+        {...props}
+      />
+      {required && !value && <Warning>Chop chop, I need some {name}</Warning>}
+    </Div>
+  )
 }
 
 const NumberInputStyle = Component.current.bgNone.textCenter.w200.fs100.input()
@@ -36,3 +48,5 @@ export const NumberInput = ({ name, ...props }) => {
 
 const Counter = Component.noSelect.w100p.flex.alignCenter.flexColumn.div()
 const Numero = Component.flex.justifyCenter.div()
+
+const Warning = Component.fs15.lh20.mt15.textRight.div()
