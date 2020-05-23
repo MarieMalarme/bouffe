@@ -3,14 +3,20 @@ import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
 import { Filters } from './Filters.js'
-import { NumberInput, TextInput } from './Inputs.js'
+import {
+  NumberInput,
+  TextInput,
+  BulletInput,
+  ListInput,
+  warn,
+} from './Inputs.js'
 
 const steps = [
   { name: 'title', content: 'text', required: true },
+  { name: 'ingredients', content: 'bullet' },
   { name: 'time', content: 'number', placeholder: 30 },
   { name: 'tags', content: Filters },
-  // { name: 'ingredients', content: 'bullet' },
-  // { name: 'steps', content: 'list' },
+  { name: 'steps', content: 'list' },
 ]
 
 export const Modale = ({ event, setEvent }) => {
@@ -39,9 +45,14 @@ const Form = ({ steps, setEvent }) => {
   const first = index === 0
   const last = index + 1 === steps.length
 
-  const next = () => setCurrent(steps[index + 1])
+  const [data, setData] = useState({})
+
+  const filled = data[current.name]
+  const missing = current.required && !filled
+
+  const next = () => (missing ? warn(current) : setCurrent(steps[index + 1]))
   const prev = () => !first && setCurrent(steps[index - 1])
-  const clear = () => {
+  const submit = () => {
     setCurrent(steps[0])
     setEvent()
   }
@@ -51,18 +62,24 @@ const Form = ({ steps, setEvent }) => {
       autoComplete="off"
       onKeyDown={(e) => {
         const { enter, backspace, esc } = key(e)
-        if (enter) last ? clear() : next()
-        if (backspace) prev()
         if (esc) setEvent()
+        if (backspace) prev()
+        if (enter) last ? submit() : next()
       }}
     >
       {steps.map((step, i) => (
-        <Step key={step.name} step={step} current={current} />
+        <Step
+          step={step}
+          data={data}
+          key={step.name}
+          setData={setData}
+          current={current}
+        />
       ))}
       <Navigation justifyBetween={!first} justifyFlexEnd={first}>
         <Button display={!first} action={prev} text="Back" />
-        <Button display={!last} action={next} text="Next" />
-        <Button display={last} action={clear} text="Submit" />
+        <Button display={!last} action={next} text="Next" grey8={missing} />
+        <Button display={last} action={submit} text="Submit" />
       </Navigation>
     </Steps>
   )
@@ -70,10 +87,10 @@ const Form = ({ steps, setEvent }) => {
 
 const Steps = Component.flex.flexColumn.justifyBetween.form()
 
-const Button = ({ display, action, text }) => {
+const Button = ({ display, action, text, ...props }) => {
   if (!display) return null
   return (
-    <Div noSelect pointer onClick={action}>
+    <Div noSelect pointer onClick={action} {...props}>
       {text}
     </Div>
   )
@@ -81,7 +98,7 @@ const Button = ({ display, action, text }) => {
 
 const Navigation = Component.flex.alignCenter.w100p.fixed.b0.r0.pa100.div()
 
-const Step = ({ step, current }) => {
+const Step = ({ step, current, data, setData }) => {
   const [ref, setRef] = useState()
 
   useEffect(() => {
@@ -93,8 +110,15 @@ const Step = ({ step, current }) => {
 
   const text = content === 'text'
   const number = content === 'number'
+  const bullet = content === 'bullet'
+  const list = content === 'list'
 
-  const Content = (text && TextInput) || (number && NumberInput) || content
+  const Content =
+    (text && TextInput) ||
+    (number && NumberInput) ||
+    (bullet && BulletInput) ||
+    (list && ListInput) ||
+    content
 
   return (
     <Div hidden={name !== current.name}>
@@ -104,7 +128,10 @@ const Step = ({ step, current }) => {
       <Div mt160>
         <Content
           name={name}
+          data={data}
+          setData={setData}
           elemRef={setRef}
+          current={current}
           required={required}
           placeholder={placeholder || `Gimme some ${name}`}
         />

@@ -48,3 +48,22 @@
     margin-bottom: 0;
   }
 }
+
+.fade-red {
+  animation: 0.75s ease-in-out fadered;
+}
+
+@keyframes fadered {
+  0% {
+    color: var(--blue6);
+    border-color: var(--blue6);
+  }
+  30% {
+    color: var(--blue6);
+    border-color: var(--blue6);
+  }
+  100% {
+    color: var(--black);
+    border-color: var(--black);
+  }
+}
