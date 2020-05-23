@@ -8,6 +8,7 @@ import {
   whiteSpaces,
   transitions,
   directions,
+  overflows,
 } from './css.js'
 
 import { colors } from './colors.js'
@@ -28,8 +29,9 @@ export const core = {
   flexRow: `flex-direction: row`,
   bRad50p: `border-radius: 50%`,
   w100vw: `width: 100vw`,
-  wThird: `width: calc(100% / 3)`,
+  maxW100p: `max-width: 100%`,
   h100vh: `height: 100vh`,
+  maxH100p: `max-height: 100%`,
   fs100: `font-size: 100px`,
   noDecoration: `text-decoration: none`,
   bgNone: `background: none`,
@@ -53,9 +55,15 @@ export const core = {
     -4px -4px 7px rgba(255, 255, 255, 0.7)`,
   noEvents: `pointer-events: none`,
   noSelect: `user-select: none`,
+  shrink0: `flex-shrink: 0`,
 }
 
 const suffixed = [
+  {
+    selector: `noScrollbar`,
+    suffix: `::-webkit-scrollbar`,
+    rule: `display: none`,
+  },
   {
     selector: `hoverShadow`,
     suffix: `:hover`,
@@ -131,6 +139,9 @@ export const generated = {
   })),
   borderRadius: generate(array(26), (i) => ({
     [`bRad${i}`]: `border-radius: ${i}px`,
+  })),
+  overflow: generate(overflows, (o) => ({
+    [`of${capitalize(o)}`]: `overflow: ${o}`,
   })),
 }
 

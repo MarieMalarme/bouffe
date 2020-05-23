@@ -34,21 +34,19 @@ body {
 
 input {
   outline: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  border: none;
 }
 
 input::placeholder {
   color: var(--grey7);
 }
 
-input[type='number'] {
-  border: none;
-}
-
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }

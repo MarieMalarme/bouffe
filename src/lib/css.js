@@ -71,3 +71,5 @@ export const transitions = [
   'boxShadow',
   'border',
 ]
+
+export const overflows = ['visible', 'hidden', 'scroll', 'auto']
