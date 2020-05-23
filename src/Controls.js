@@ -7,7 +7,7 @@ import { Modale } from './Modale.js'
 
 const body = document.querySelector('body')
 
-export const Controls = ({ selected, setSelected }) => {
+export const Controls = ({ selected, setSelected, recipes, setRecipes }) => {
   const [event, setEvent] = useState()
 
   body.style.overflow = event ? 'hidden' : 'auto'
@@ -16,7 +16,12 @@ export const Controls = ({ selected, setSelected }) => {
     <Bar className="gradient-bg">
       <Filters selected={selected} setSelected={setSelected} />
       <New event={event} setEvent={setEvent} />
-      <Modale event={event} setEvent={setEvent} />
+      <Modale
+        event={event}
+        setEvent={setEvent}
+        recipes={recipes}
+        setRecipes={setRecipes}
+      />
     </Bar>
   )
 }

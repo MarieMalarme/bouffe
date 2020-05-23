@@ -19,7 +19,7 @@ const steps = [
   { name: 'steps', content: 'list' },
 ]
 
-export const Modale = ({ event, setEvent }) => {
+export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
   const clicked = event === 'click'
   const hovered = event === 'hover'
 
@@ -30,7 +30,14 @@ export const Modale = ({ event, setEvent }) => {
       o100={event}
       o0={!event}
     >
-      {clicked && <Form steps={steps} setEvent={setEvent} />}
+      {clicked && (
+        <Form
+          steps={steps}
+          setEvent={setEvent}
+          recipes={recipes}
+          setRecipes={setRecipes}
+        />
+      )}
       {hovered && <Hovered />}
     </Wrapper>
   )
@@ -38,7 +45,7 @@ export const Modale = ({ event, setEvent }) => {
 
 const Wrapper = Component.flex.lh80.justifyFlexEnd.flexColumn.w100vw.h100vh.fixed.bgGrey9.t0.l0.animOpacity.pa100.fs60.div()
 
-const Form = ({ steps, setEvent }) => {
+const Form = ({ steps, setEvent, recipes, setRecipes }) => {
   const [current, setCurrent] = useState(steps[0])
 
   const index = steps.indexOf(current)
@@ -53,6 +60,7 @@ const Form = ({ steps, setEvent }) => {
   const next = () => (missing ? warn(current) : setCurrent(steps[index + 1]))
   const prev = () => !first && setCurrent(steps[index - 1])
   const submit = () => {
+    setRecipes([...recipes, { ...data }])
     setCurrent(steps[0])
     setEvent()
   }
