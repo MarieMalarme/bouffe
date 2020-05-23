@@ -6,14 +6,14 @@ import { Filters } from './Filters.js'
 import {
   NumberInput,
   TextInput,
-  BulletInput,
+  BulletsInput,
   ListInput,
   warn,
 } from './Inputs.js'
 
 const steps = [
   { name: 'title', content: 'text', required: true },
-  { name: 'ingredients', content: 'bullet' },
+  { name: 'ingredients', content: 'bullets', required: true },
   { name: 'time', content: 'number', placeholder: 30 },
   { name: 'tags', content: Filters },
   { name: 'steps', content: 'list' },
@@ -66,34 +66,36 @@ const Form = ({ steps, setEvent, recipes, setRecipes }) => {
   }
 
   return (
-    <Steps
-      autoComplete="off"
-      onKeyDown={(e) => {
-        const { enter, backspace, esc } = key(e)
-        if (esc) setEvent()
-        if (backspace) prev()
-        if (enter) last ? submit() : next()
-      }}
-    >
-      {steps.map((step, i) => (
-        <Step
-          step={step}
-          data={data}
-          key={step.name}
-          setData={setData}
-          current={current}
-        />
-      ))}
+    <Div flex flexColumn justifyBetween h100p>
+      <Steps
+        autoComplete="off"
+        onKeyDown={(e) => {
+          const { enter, backspace, esc } = key(e)
+          if (esc) setEvent()
+          if (backspace) prev()
+          if (enter) last ? submit() : next()
+        }}
+      >
+        {steps.map((step, i) => (
+          <Step
+            step={step}
+            data={data}
+            key={step.name}
+            setData={setData}
+            current={current}
+          />
+        ))}
+      </Steps>
       <Navigation justifyBetween={!first} justifyFlexEnd={first}>
         <Button display={!first} action={prev} text="Back" />
         <Button display={!last} action={next} text="Next" grey8={missing} />
         <Button display={last} action={submit} text="Submit" />
       </Navigation>
-    </Steps>
+    </Div>
   )
 }
 
-const Steps = Component.flex.flexColumn.justifyBetween.form()
+const Steps = Component.flex.flexColumn.justifyBetween.h100p.form()
 
 const Button = ({ display, action, text, ...props }) => {
   if (!display) return null
@@ -104,7 +106,7 @@ const Button = ({ display, action, text, ...props }) => {
   )
 }
 
-const Navigation = Component.flex.alignCenter.w100p.fixed.b0.r0.pa100.div()
+const Navigation = Component.flex.alignCenter.w100p.mt50.div()
 
 const Step = ({ step, current, data, setData }) => {
   const [ref, setRef] = useState()
@@ -118,22 +120,20 @@ const Step = ({ step, current, data, setData }) => {
 
   const text = content === 'text'
   const number = content === 'number'
-  const bullet = content === 'bullet'
+  const bullets = content === 'bullets'
   const list = content === 'list'
 
   const Content =
     (text && TextInput) ||
     (number && NumberInput) ||
-    (bullet && BulletInput) ||
+    (bullets && BulletsInput) ||
     (list && ListInput) ||
     content
 
   return (
-    <Div hidden={name !== current.name}>
-      <Div className="fade-in" fixed heading fs60>
-        {capitalize(name)}
-      </Div>
-      <Div mt160>
+    <Div hidden={name !== current.name} h100p mt160>
+      <Label className="fade-in">{capitalize(name)}</Label>
+      <Div h100p relative ofHidden>
         <Content
           name={name}
           data={data}
@@ -147,6 +147,8 @@ const Step = ({ step, current, data, setData }) => {
     </Div>
   )
 }
+
+const Label = Component.fixed.heading.fs60.div()
 
 const Hovered = () => (
   <Div>

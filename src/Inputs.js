@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Component, Div } from './lib/design.js'
 import { Minus, Plus } from './Icons.js'
 
-const TextInputStyle = Component.current.bgNone.pb15.bb.fs40.w100p.input()
+const TextInputStyle = Component.current.bgNone.fs40.w100p.input()
 export const TextInput = ({ name, required, data, setData, ...rest }) => (
   <Div w75p>
     <TextInputStyle
@@ -16,6 +16,8 @@ export const TextInput = ({ name, required, data, setData, ...rest }) => (
       type="text"
       name={name}
       id={`input-${name}`}
+      pb15
+      bb
       {...rest}
     />
     {required && !data[name] && (
@@ -58,18 +60,125 @@ export const NumberInput = ({ name, current, data, setData, ...rest }) => {
 const Counter = Component.noSelect.w100p.flex.alignCenter.flexColumn.div()
 const Numero = Component.flex.justifyCenter.div()
 
-export const BulletInput = ({ name, current, data, setData, ...rest }) => {
-  const [list, setList] = useState([{ ingredient: 'Salt', quantity: '1 cup' }])
+export const BulletsInput = ({ name, current, data, setData, required }) => {
+  const [reference, setReference] = useState(null)
+  const [bullets, setBullets] = useState([0])
+  const [click, setClick] = useState(false)
+
+  const key = name.slice(0, -1)
 
   useEffect(() => {
-    if (current.name !== name) return
-    setData({ ...data, [name]: list })
-  }, [current, list, name])
+    if (bullets.length > 1) return
+    const first = document.getElementById(`bullet-${name}-${bullets[0]}`)
+    first.focus()
+  })
 
-  return <TextInputStyle type="text" {...rest} />
+  const none =
+    !data[name] ||
+    (data[name] && Object.values(data[name]).every((d) => !d[key]))
+
+  return (
+    <Div flex flexColumn justifyFlexEnd h100p>
+      <Bullets className="bullets" elemRef={setReference}>
+        {bullets.map((i) => (
+          <Bullet
+            key={`bullet-${name}-${i}`}
+            name={name}
+            data={data}
+            setData={setData}
+            bullets={bullets}
+            setBullets={setBullets}
+            setClick={setClick}
+            i={i}
+          />
+        ))}
+      </Bullets>
+      <Div flex alignCenter justifyBetween>
+        <Add
+          bullets={bullets}
+          setBullets={setBullets}
+          click={click}
+          setClick={setClick}
+          reference={reference}
+        />
+        {required && none && (
+          <Warning id={`warning-${name}`}>
+            Chop chop, I need some {name}
+          </Warning>
+        )}
+      </Div>
+    </Div>
+  )
 }
 
-export const ListInput = ({ name, current, data, setData, ...rest }) => {
+const Bullets = Component.absolute.flex.flexWrap.justifyBetween.alignFlexStart.w100p.noScrollbar.t0.ofScroll.div()
+
+const Bullet = ({ name, data, setData, bullets, setBullets, setClick, i }) => {
+  const single = bullets.length === 1
+  const key = name.slice(0, -1)
+  return (
+    <Div flex alignCenter w45p mb25>
+      <Dot />
+      <TextInputStyle
+        autoFocus
+        type="text"
+        name={name}
+        id={`bullet-${name}-${i}`}
+        placeholder={`Gimme some${single ? 'thing' : ' more'}`}
+        onChange={(e) => {
+          setClick(e.target.value)
+          const item = { id: i, [key]: e.target.value }
+          const updated = data[name] && [
+            ...data[name].filter((d) => d.id !== i),
+            item,
+          ]
+          setData({
+            ...data,
+            [name]: updated || [item],
+          })
+        }}
+        onBlur={(e) => {
+          if (single) return
+          if (!e.target.value) {
+            setBullets(bullets.filter((a) => a !== i))
+            setClick(true)
+            setData({
+              ...data,
+              [name]: data[name].filter((d) => d[key]),
+            })
+          }
+        }}
+      />
+    </Div>
+  )
+}
+
+const Dot = Component.w10.h10.bRad50p.shrink0.bgBlack.mr40.div()
+
+const Add = ({ bullets, setBullets, click, setClick, reference }) => (
+  <Button
+    h50
+    o10={!click}
+    o100={click}
+    pointer={click}
+    onClick={async () => {
+      if (!click) return
+      setClick(false)
+      await setBullets([...bullets, bullets[bullets.length - 1] + 1])
+      reference.scrollTo({
+        top: reference.scrollHeight,
+        behavior: 'smooth',
+      })
+    }}
+  >
+    <Plus mr20 width={40} strokeWidth={4} />
+    Add ingredient
+  </Button>
+)
+
+const Button = Component.flex.alignCenter.fs40.grey3.animOpacity.zi2.div()
+
+export const ListInput = ({ name, current, data, setData, required }) => {
   const [list, setList] = useState(['Step 1', 'Step 2', 'Step 3'])
 
   useEffect(() => {
@@ -77,7 +186,7 @@ export const ListInput = ({ name, current, data, setData, ...rest }) => {
     setData({ ...data, [name]: list })
   }, [current, list, name])
 
-  return <TextInputStyle type="text" {...rest} />
+  return <TextInputStyle pb15 bb type="text" />
 }
 
 const Warning = Component.fs15.lh20.mt15.textRight.div()
