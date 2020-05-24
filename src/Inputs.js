@@ -198,12 +198,13 @@ const Warning = Component.fs15.lh20.mt15.textRight.div()
 
 export const warn = (current) => {
   const warning = document.getElementById(`warning-${current.name}`)
-  const input = document.getElementById(`input-${current.name}`)
+  const input = document.activeElement
   const targets = [warning, input]
-  targets.forEach((e) => {
-    e.classList.add('fade-red')
+  targets.forEach((target) => {
+    if (!target) return
+    target.classList.add('fade-red')
     setTimeout(() => {
-      e.classList.remove('fade-red')
+      target.classList.remove('fade-red')
     }, 750)
   })
 }
