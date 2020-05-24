@@ -4,11 +4,13 @@ import { capitalize, key } from './lib/toolbox.js'
 import { Component, Div } from './lib/design.js'
 import { Filters } from './Filters.js'
 import { NumberInput, TextInput, BulletsInput, warn } from './Inputs.js'
+
+const stages = [
   { name: 'title', content: 'text', required: true },
   { name: 'ingredients', content: 'bullets', required: true },
-  { name: 'time', content: 'number', placeholder: 30 },
+  { name: 'time', content: 'number' },
   { name: 'tags', content: 'tags' },
-  { name: 'steps', content: 'list' },
+  { name: 'steps', content: 'orders', required: true },
 ]
 
 export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
@@ -24,7 +26,7 @@ export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
     >
       {clicked && (
         <Form
-          steps={steps}
+          stages={stages}
           setEvent={setEvent}
           recipes={recipes}
           setRecipes={setRecipes}
@@ -37,29 +39,29 @@ export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
 
 const Wrapper = Component.flex.justifyFlexEnd.flexColumn.w100vw.h100vh.fixed.bgGrey9.t0.l0.animOpacity.pa100.fs60.div()
 
-const Form = ({ steps, setEvent, recipes, setRecipes }) => {
-  const [current, setCurrent] = useState(steps[0])
+const Form = ({ stages, setEvent, recipes, setRecipes }) => {
+  const [current, setCurrent] = useState(stages[0])
 
-  const index = steps.indexOf(current)
+  const index = stages.indexOf(current)
   const first = index === 0
-  const last = index + 1 === steps.length
+  const last = index + 1 === stages.length
 
   const [data, setData] = useState({})
 
   const filled = data[current.name]
   const missing = current.required && !filled
 
-  const next = () => (missing ? warn(current) : setCurrent(steps[index + 1]))
-  const prev = () => !first && setCurrent(steps[index - 1])
+  const next = () => (missing ? warn(current) : setCurrent(stages[index + 1]))
+  const prev = () => !first && setCurrent(stages[index - 1])
   const submit = () => {
     setRecipes([...recipes, { ...data }])
-    setCurrent(steps[0])
+    setCurrent(stages[0])
     setEvent()
   }
 
   return (
     <Div flex flexColumn justifyBetween h100p>
-      <Steps
+      <Stages
         autoComplete="off"
         onKeyDown={(e) => {
           const { enter, backspace, esc } = key(e)
@@ -68,16 +70,16 @@ const Form = ({ steps, setEvent, recipes, setRecipes }) => {
           if (enter) last ? submit() : next()
         }}
       >
-        {steps.map((step, i) => (
-          <Step
-            step={step}
+        {stages.map((stage, i) => (
+          <Stage
+            stage={stage}
             data={data}
-            key={step.name}
+            key={stage.name}
             setData={setData}
             current={current}
           />
         ))}
-      </Steps>
+      </Stages>
       <Navigation justifyBetween={!first} justifyFlexEnd={first}>
         <Button display={!first} action={prev} text="Back" />
         <Button display={!last} action={next} text="Next" grey8={missing} />
@@ -87,7 +89,7 @@ const Form = ({ steps, setEvent, recipes, setRecipes }) => {
   )
 }
 
-const Steps = Component.flex.flexColumn.justifyBetween.h100p.form()
+const Stages = Component.flex.flexColumn.justifyBetween.h100p.form()
 
 const Button = ({ display, action, text, ...props }) => {
   if (!display) return null
@@ -100,7 +102,7 @@ const Button = ({ display, action, text, ...props }) => {
 
 const Navigation = Component.flex.alignCenter.w100p.mt50.div()
 
-const Step = ({ step, current, data, setData }) => {
+const Stage = ({ stage, current, data, setData }) => {
   const [ref, setRef] = useState()
 
   useEffect(() => {
@@ -108,7 +110,7 @@ const Step = ({ step, current, data, setData }) => {
     ref.focus()
   })
 
-  const { name, content, placeholder, required } = step
+  const { name, content, required } = stage
 
   const text = content === 'text'
   const number = content === 'number'
