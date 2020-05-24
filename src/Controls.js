@@ -55,4 +55,4 @@ const New = ({ event, setEvent }) => {
   )
 }
 
-const Button = Component.zi1.flex.alignCenter.justifyCenter.h40.w40.bgGrey1.bRad50p.pointer.div()
+const Button = Component.zi1.flex.alignCenter.justifyCenter.shrink0.h40.w40.bgGrey1.bRad50p.pointer.div()
