@@ -74,9 +74,27 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
     first.focus()
   })
 
-  const none =
-    !data[name] ||
-    (data[name] && Object.values(data[name]).every((d) => !d[key]))
+  const none = !data[name] || (data[name] && data[name].every((d) => !d[key]))
+
+  const remove = (i) => {
+    setBullets(bullets.filter((a) => a !== i))
+    setData({
+      ...data,
+      [name]: data[name].filter((d) => d[key]),
+    })
+  }
+
+  const update = (e, i) => {
+    const item = { id: i, [key]: e.target.value }
+    const updated = data[name] && [
+      ...data[name].filter((d) => d.id !== i),
+      item,
+    ]
+    setData({
+      ...data,
+      [name]: updated || [item],
+    })
+  }
 
   return (
     <Div flex flexColumn justifyFlexEnd h100p>
@@ -85,8 +103,8 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
           <Bullet
             key={`bullet-${name}-${i}`}
             name={name}
-            data={data}
-            setData={setData}
+            remove={remove}
+            update={update}
             bullets={bullets}
             setBullets={setBullets}
             setClick={setClick}
@@ -114,9 +132,8 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
 
 const Bullets = Component.absolute.flex.flexWrap.justifyBetween.alignFlexStart.w100p.noScrollbar.t0.ofScroll.div()
 
-const Bullet = ({ name, data, setData, bullets, setBullets, setClick, i }) => {
+const Bullet = ({ name, remove, update, bullets, setClick, i }) => {
   const single = bullets.length === 1
-  const key = name.slice(0, -1)
   return (
     <Div flex alignCenter w45p mb25>
       <Dot />
@@ -127,26 +144,14 @@ const Bullet = ({ name, data, setData, bullets, setBullets, setClick, i }) => {
         id={`bullet-${name}-${i}`}
         placeholder={`Gimme some${single ? 'thing' : ' more'}`}
         onChange={(e) => {
+          update(e, i)
           setClick(e.target.value)
-          const item = { id: i, [key]: e.target.value }
-          const updated = data[name] && [
-            ...data[name].filter((d) => d.id !== i),
-            item,
-          ]
-          setData({
-            ...data,
-            [name]: updated || [item],
-          })
         }}
         onBlur={(e) => {
           if (single) return
           if (!e.target.value) {
-            setBullets(bullets.filter((a) => a !== i))
+            remove(i)
             setClick(true)
-            setData({
-              ...data,
-              [name]: data[name].filter((d) => d[key]),
-            })
           }
         }}
       />
@@ -158,7 +163,6 @@ const Dot = Component.w10.h10.bRad50p.shrink0.bgBlack.mr40.div()
 
 const Add = ({ bullets, setBullets, click, setClick, reference }) => (
   <Button
-    h50
     o10={!click}
     o100={click}
     pointer={click}
