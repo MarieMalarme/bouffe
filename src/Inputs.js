@@ -7,6 +7,7 @@ const TextInputStyle = Component.current.bgNone.fs40.w100p.input()
 export const TextInput = ({ name, required, data, setData, ...rest }) => (
   <Div w75p>
     <TextInputStyle
+      placeholder={`Gimme some ${name}`}
       onChange={(e) =>
         setData({
           ...data,

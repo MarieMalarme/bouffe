@@ -15,7 +15,7 @@ const steps = [
   { name: 'title', content: 'text', required: true },
   { name: 'ingredients', content: 'bullets', required: true },
   { name: 'time', content: 'number', placeholder: 30 },
-  { name: 'tags', content: Filters },
+  { name: 'tags', content: 'tags' },
   { name: 'steps', content: 'list' },
 ]
 
@@ -122,13 +122,31 @@ const Step = ({ step, current, data, setData }) => {
   const number = content === 'number'
   const bullets = content === 'bullets'
   const list = content === 'list'
+  const tags = content === 'tags'
 
   const Content =
     (text && TextInput) ||
     (number && NumberInput) ||
     (bullets && BulletsInput) ||
     (list && ListInput) ||
+    (tags && Filters) ||
     content
+
+  const filter = (target) => {
+    if (!data[name]) return setData({ ...data, [name]: [target] })
+
+    const add = [...data[name], target]
+    const remove =
+      data[name].includes(target) && data[name].filter((f) => f !== target)
+
+    setData({
+      ...data,
+      [name]: remove || add,
+    })
+  }
+
+  const filters = tags && { setFilters: (target) => filter(target) }
+  const elemRef = !bullets && { elemRef: setRef }
 
   return (
     <Div hidden={name !== current.name} h100p mt160>
@@ -138,10 +156,10 @@ const Step = ({ step, current, data, setData }) => {
           name={name}
           data={data}
           setData={setData}
-          elemRef={setRef}
           current={current}
           required={required}
-          placeholder={placeholder || `Gimme some ${name}`}
+          {...filters}
+          {...elemRef}
         />
       </Div>
     </Div>

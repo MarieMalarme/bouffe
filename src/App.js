@@ -9,12 +9,12 @@ import { recipes as data } from './recipes.data.js'
 import './App.css'
 
 const App = () => {
-  const [selected, setSelected] = useState([])
+  const [filters, setFilters] = useState([])
   const [recipes, setRecipes] = useState(data)
 
   const filtered = recipes.filter((recipe) => {
     if (!recipe.tags) return false
-    for (const s of selected) {
+    for (const s of filters) {
       if (recipe.tags.includes(s)) {
         return true
       }
@@ -22,13 +22,13 @@ const App = () => {
     return false
   })
 
-  const displayed = selected.length ? filtered : recipes
+  const displayed = filters.length ? filtered : recipes
 
   return (
     <Div ph100 pb100 pt30>
       <Controls
-        selected={selected}
-        setSelected={setSelected}
+        filters={filters}
+        setFilters={setFilters}
         recipes={recipes}
         setRecipes={setRecipes}
       />

@@ -7,14 +7,19 @@ import { Modale } from './Modale.js'
 
 const body = document.querySelector('body')
 
-export const Controls = ({ selected, setSelected, recipes, setRecipes }) => {
+export const Controls = ({ filters, setFilters, recipes, setRecipes }) => {
   const [event, setEvent] = useState()
 
   body.style.overflow = event ? 'hidden' : 'auto'
 
+  const filter = (target) =>
+    filters.includes(target)
+      ? setFilters(filters.filter((f) => f !== target))
+      : setFilters([...filters, target])
+
   return (
     <Bar className="gradient-bg">
-      <Filters selected={selected} setSelected={setSelected} />
+      <Filters setFilters={(target) => filter(target)} />
       <New event={event} setEvent={setEvent} />
       <Modale
         event={event}

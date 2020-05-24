@@ -3,20 +3,15 @@ import { Component, Div } from './lib/design.js'
 
 const filters = ['Salty', 'Sweet', 'Meat', 'Vegetarian', 'Asian', 'French']
 
-export const Filters = ({ selected, setSelected }) => (
+export const Filters = ({ setFilters }) => (
   <Div flex alignCenter flexWrap>
     {filters.map((filter, i) => (
-      <Filter
-        key={filter}
-        name={filter}
-        selected={selected}
-        setSelected={setSelected}
-      />
+      <Filter key={filter} name={filter} setFilters={setFilters} />
     ))}
   </Div>
 )
 
-const Filter = ({ name, isSelected = false, selected, setSelected }) => {
+const Filter = ({ name, isSelected = false, setFilters }) => {
   const [active, setActive] = useState(isSelected)
 
   return (
@@ -28,9 +23,7 @@ const Filter = ({ name, isSelected = false, selected, setSelected }) => {
       hoverBlack={!active}
       onClick={() => {
         setActive(!active)
-        selected.includes(name)
-          ? setSelected(selected.filter((f) => f !== name))
-          : setSelected([...selected, name])
+        setFilters(name)
       }}
     >
       {name}
