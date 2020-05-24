@@ -3,15 +3,7 @@ import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
 import { Filters } from './Filters.js'
-import {
-  NumberInput,
-  TextInput,
-  BulletsInput,
-  ListInput,
-  warn,
-} from './Inputs.js'
-
-const steps = [
+import { NumberInput, TextInput, BulletsInput, warn } from './Inputs.js'
   { name: 'title', content: 'text', required: true },
   { name: 'ingredients', content: 'bullets', required: true },
   { name: 'time', content: 'number', placeholder: 30 },
@@ -121,14 +113,15 @@ const Step = ({ step, current, data, setData }) => {
   const text = content === 'text'
   const number = content === 'number'
   const bullets = content === 'bullets'
-  const list = content === 'list'
+  const orders = content === 'orders'
   const tags = content === 'tags'
+
+  const list = bullets || orders
 
   const Content =
     (text && TextInput) ||
     (number && NumberInput) ||
-    (bullets && BulletsInput) ||
-    (list && ListInput) ||
+    (list && BulletsInput) ||
     (tags && Filters) ||
     content
 
@@ -146,12 +139,13 @@ const Step = ({ step, current, data, setData }) => {
   }
 
   const filters = tags && { setFilters: (target) => filter(target) }
-  const elemRef = !bullets && { elemRef: setRef }
+  const elemRef = !list && { elemRef: setRef }
+  const numbers = orders && { type: 'numbers' }
 
   return (
     <Div hidden={name !== current.name} h100p mt160>
       <Label className="fade-in">{capitalize(name)}</Label>
-      <Div h100p={bullets} relative={bullets} ofHidden={bullets}>
+      <Div h100p={list} relative={list} ofHidden={list}>
         <Content
           name={name}
           data={data}
@@ -160,6 +154,7 @@ const Step = ({ step, current, data, setData }) => {
           required={required}
           {...filters}
           {...elemRef}
+          {...numbers}
         />
       </Div>
     </Div>

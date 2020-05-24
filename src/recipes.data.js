@@ -17,21 +17,38 @@ export const recipes = [
       { ingredient: 'Nuts' },
     ],
     steps: [
-      'Grease the mold',
-      'Put the butter to heat until liquid',
-      'Mash the bananas',
-      'Whisk the flour, baking soda, salt, and cinnamon in a bowl',
-      'In another bowl, beat the butter and brown sugar together until smooth and creamy',
-      'Add the eggs one at a time, beating continously',
-      'Add the yogurt, mashed bananas, and vanilla extract',
-      'Preheat the oven at 180°',
-      'Slowly combine the flour mix into the wet ingredients, beating until no flour pockets remain',
-      'Add the nuts',
-      'Put the mixture in the mold',
-      'Cook for 1h',
-      'Check the cooking - a knife coming out clean of the bread',
-      'Remove from the oven and let it cool',
-      'Enjoy and keep up to 2 days in a room, 1 week in the fridge',
+      { id: 1, step: 'Grease the mold' },
+      { id: 2, step: 'Put the butter to heat until liquid' },
+      { id: 3, step: 'Mash the bananas' },
+      {
+        id: 4,
+        step: 'Whisk the flour, baking soda, salt, and cinnamon in a bowl',
+      },
+      {
+        id: 5,
+        step:
+          'In another bowl, beat the butter and brown sugar together until smooth and creamy',
+      },
+      { id: 6, step: 'Add the eggs one at a time, beating continously' },
+      { id: 7, step: 'Add the yogurt, mashed bananas, and vanilla extract' },
+      { id: 8, step: 'Preheat the oven at 180°' },
+      {
+        id: 9,
+        step:
+          'Slowly combine the flour mix into the wet ingredients, beating until no flour pockets remain',
+      },
+      { id: 10, step: 'Add the nuts' },
+      { id: 11, step: 'Put the mixture in the mold' },
+      { id: 12, step: 'Cook for 1h' },
+      {
+        id: 13,
+        step: 'Check the cooking - a knife coming out clean of the bread',
+      },
+      { id: 14, step: 'Remove from the oven and let it cool' },
+      {
+        id: 15,
+        step: 'Enjoy and keep up to 2 days in a room, 1 week in the fridge',
+      },
     ],
   },
 ]

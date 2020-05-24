@@ -61,7 +61,7 @@ export const NumberInput = ({ name, current, data, setData, ...rest }) => {
 const Counter = Component.noSelect.w100p.flex.alignCenter.flexColumn.div()
 const Numero = Component.flex.justifyCenter.div()
 
-export const BulletsInput = ({ name, current, data, setData, required }) => {
+export const BulletsInput = ({ name, data, setData, required, type }) => {
   const [reference, setReference] = useState(null)
   const [bullets, setBullets] = useState([0])
   const [click, setClick] = useState(false)
@@ -108,6 +108,7 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
             bullets={bullets}
             setBullets={setBullets}
             setClick={setClick}
+            type={type}
             i={i}
           />
         ))}
@@ -119,6 +120,7 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
           click={click}
           setClick={setClick}
           reference={reference}
+          item={key}
         />
         {required && none && (
           <Warning id={`warning-${name}`}>
@@ -132,11 +134,14 @@ export const BulletsInput = ({ name, current, data, setData, required }) => {
 
 const Bullets = Component.absolute.flex.flexWrap.justifyBetween.alignFlexStart.w100p.noScrollbar.t0.ofScroll.div()
 
-const Bullet = ({ name, remove, update, bullets, setClick, i }) => {
+const Bullet = ({ name, remove, update, bullets, setClick, type, i }) => {
   const single = bullets.length === 1
+  const numbers = type === 'numbers'
+  const index = bullets.indexOf(i) + 1
+
   return (
-    <Div flex alignCenter w45p mb25>
-      <Dot />
+    <Div flex alignCenter mb25 w45p={!numbers} w100p={numbers}>
+      <Lister numbers={numbers} index={index} />
       <TextInputStyle
         autoFocus
         type="text"
@@ -159,9 +164,20 @@ const Bullet = ({ name, remove, update, bullets, setClick, i }) => {
   )
 }
 
+const Lister = ({ numbers, index }) => {
+  if (!numbers) return <Dot />
+  return (
+    <Int>
+      {index < 10 && '0'}
+      {index}
+    </Int>
+  )
+}
+
+const Int = Component.grey7.fs40.w35.mr40.div()
 const Dot = Component.w10.h10.bRad50p.shrink0.bgBlack.mr40.div()
 
-const Add = ({ bullets, setBullets, click, setClick, reference }) => (
+const Add = ({ bullets, setBullets, click, setClick, reference, item }) => (
   <Button
     o10={!click}
     o100={click}
@@ -177,22 +193,11 @@ const Add = ({ bullets, setBullets, click, setClick, reference }) => (
     }}
   >
     <Plus mr20 width={40} strokeWidth={4} />
-    Add ingredient
+    Add {item}
   </Button>
 )
 
 const Button = Component.flex.alignCenter.fs40.grey3.animOpacity.zi2.div()
-
-export const ListInput = ({ name, current, data, setData, required }) => {
-  const [list, setList] = useState(['Step 1', 'Step 2', 'Step 3'])
-
-  useEffect(() => {
-    if (current.name !== name) return
-    setData({ ...data, [name]: list })
-  }, [current, list, name])
-
-  return <TextInputStyle pb15 bb type="text" />
-}
 
 const Warning = Component.fs15.lh20.mt15.textRight.div()
 
