@@ -43,7 +43,7 @@ export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
   )
 }
 
-const Wrapper = Component.flex.lh80.justifyFlexEnd.flexColumn.w100vw.h100vh.fixed.bgGrey9.t0.l0.animOpacity.pa100.fs60.div()
+const Wrapper = Component.flex.justifyFlexEnd.flexColumn.w100vw.h100vh.fixed.bgGrey9.t0.l0.animOpacity.pa100.fs60.div()
 
 const Form = ({ steps, setEvent, recipes, setRecipes }) => {
   const [current, setCurrent] = useState(steps[0])
@@ -151,7 +151,7 @@ const Step = ({ step, current, data, setData }) => {
   return (
     <Div hidden={name !== current.name} h100p mt160>
       <Label className="fade-in">{capitalize(name)}</Label>
-      <Div h100p relative ofHidden>
+      <Div h100p={bullets} relative={bullets} ofHidden={bullets}>
         <Content
           name={name}
           data={data}
@@ -169,7 +169,7 @@ const Step = ({ step, current, data, setData }) => {
 const Label = Component.fixed.heading.fs60.div()
 
 const Hovered = () => (
-  <Div>
+  <Div lh80>
     <Div grey7>
       Time to try new tasty food
       <br />
