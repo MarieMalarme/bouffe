@@ -32,6 +32,11 @@
   pointer-events: none;
 }
 
+.agenda-box:hover {
+  z-index: 5;
+  box-shadow: -65px -65px 30px -65px rgba(0, 0, 0, 0.1);
+}
+
 .fade-in {
   animation: 0.3s ease-in-out fadein;
   top: 100px;

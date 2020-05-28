@@ -13,7 +13,7 @@ export const Agenda = ({}) => {
   return (
     <Div pa100 h100vh flex flexColumn>
       <Div flex justifyBetween>
-        <Div heading fs60 mb40>
+        <Div heading fs60 mb50>
           Agenda
         </Div>
         <Toggles display={display} setDisplay={setDisplay} />
@@ -56,4 +56,15 @@ const Lines = ({}) => (
   </Div>
 )
 
-const Boxes = ({}) => <Div>Boxes</Div>
+const Boxes = ({}) => (
+  <Div h100p flex flexWrap justifyBetween>
+    {weekdays.map((day, i) => (
+      <Box className="agenda-box" w25p={i !== 6} w50p={i === 6}>
+        <Div fs30>{day}</Div>
+        <Div pt25 w100p lh25></Div>
+      </Box>
+    ))}
+  </Div>
+)
+
+const Box = Component.animShadow.pa30.bgGrey9.flex.flexColumn.alignFlexStart.div()
