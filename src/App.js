@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
+import { Router } from '@reach/router'
 
 import { Div } from './lib/design.js'
 import { Controls } from './Controls.js'
 import { Recipes } from './Recipes.js'
+import { Agenda } from './Agenda.js'
 
 import { recipes as data } from './recipes.data.js'
 
 import './App.css'
 
 const App = () => {
+  return (
+    <Router>
+      <Home path="/" />
+      <Agenda path="/agenda" />
+    </Router>
+  )
+}
+
+const Home = ({}) => {
   const [filters, setFilters] = useState([])
   const [recipes, setRecipes] = useState(data)
 
