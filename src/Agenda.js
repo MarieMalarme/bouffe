@@ -3,7 +3,12 @@ import { capitalize } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
 
-const weekdays = [
+const displays = [
+  { type: 'boxes', min: 300, max: 500 },
+  { type: 'lines', min: 125, max: 300 },
+]
+
+const week = [
   { day: 'Mon', tasks: [] },
   { day: 'Tue', tasks: [] },
   { day: 'Wed', tasks: [] },
@@ -24,16 +29,18 @@ const weekdays = [
   },
   { day: 'Sun', tasks: ['Write exercise 5'] },
 ]
-const displays = [
-  { type: 'boxes', min: 200, max: 400 },
-  { type: 'lines', min: 75, max: 300 },
+
+const today = new Date()
+const todayDay = today.getDay() - 1
+
+const weekdays = [
+  ...week.slice(todayDay, week.length),
+  ...week.slice(0, todayDay),
 ]
 
 export const Agenda = () => {
-  const [display, setDisplay] = useState(displays[0])
+  const [display, setDisplay] = useState(displays[1])
   const [height, setHeight] = useState(150)
-
-  const { type } = display
 
   return (
     <Div pa100 flex flexColumn>
@@ -48,7 +55,7 @@ export const Agenda = () => {
           setHeight={setHeight}
         />
       </Header>
-      <Weekdays type={type} height={height} setHeight={setHeight} />
+      <Weekdays display={display} height={height} setHeight={setHeight} />
     </Div>
   )
 }
@@ -100,7 +107,8 @@ const Toggles = ({ type, setDisplay }) =>
 
 const Button = Component.grey4.pv10.ph25.bRad25.fs13.ml30.mono.div()
 
-const Weekdays = ({ type, height, setHeight }) => {
+const Weekdays = ({ display, height, setHeight }) => {
+  const { type, min, max } = display
   const lines = type === 'lines'
   const boxes = type === 'boxes'
   const Test = (lines && Line) || (boxes && Box)
@@ -109,16 +117,16 @@ const Weekdays = ({ type, height, setHeight }) => {
       {weekdays.map(({ day, tasks }, i) => (
         <Test
           key={day}
-          style={{ minHeight: lines ? '75px' : '200px', height: `${height}px` }}
+          style={{ minHeight: `${min}px`, height: `${height}px` }}
           className={boxes ? 'agenda-box' : ''}
           w25p={boxes && i !== 6}
           w50p={boxes && i === 6}
           bt={lines && i !== 0}
         >
           <Div fs30>{day}</Div>
-          <Div mt45>
+          <Div mt45={boxes} mt30={lines} flex={lines}>
             {tasks.map((task) => (
-              <Div mb20 flex alignCenter>
+              <Div mb20={boxes} mr70={lines} flex alignCenter>
                 <Dot />
                 <Div>{task}</Div>
               </Div>
