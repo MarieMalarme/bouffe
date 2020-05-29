@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { Router } from '@reach/router'
 
 import { Div } from './lib/design.js'
@@ -19,7 +19,7 @@ const App = () => {
   )
 }
 
-const Home = ({}) => {
+const Home = () => {
   const [filters, setFilters] = useState([])
   const [recipes, setRecipes] = useState(data)
 
