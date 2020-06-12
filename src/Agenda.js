@@ -9,25 +9,50 @@ const displays = [
 ]
 
 const week = [
-  { day: 'Mon', tasks: [] },
-  { day: 'Tue', tasks: [] },
-  { day: 'Wed', tasks: [] },
-  { day: 'Thu', tasks: [] },
+  {
+    day: 'Mon',
+    tasks: ['Post OLX bed'],
+  },
+  {
+    day: 'Tue',
+    tasks: [],
+  },
+  {
+    day: 'Wed',
+    tasks: [],
+  },
+  {
+    day: 'Thu',
+    tasks: [],
+  },
   {
     day: 'Fri',
     tasks: [
-      'Pharmacy / Groceries',
-      'Harmonize exercise 1',
-      'Polish CSS exercise 2',
-      'Write exercise 3',
-      'Convert to .md files / push',
+      'Add Notions sections in DOM JS exercises',
+      'Debug / redeploy Rusch',
     ],
   },
   {
     day: 'Sat',
-    tasks: ['Bike / playa', 'Write exercise 4', 'Debug Rusch'],
+    tasks: [
+      'Print keycaps',
+      'Project Arduino sensors',
+      'Clean the oven',
+      'Clean the room',
+    ],
   },
-  { day: 'Sun', tasks: ['Write exercise 5'] },
+  {
+    day: 'Sun',
+    tasks: [],
+  },
+]
+
+const miscellaneous = [
+  'Server / Database for this app (check Wild Source code)',
+  'Database visualization',
+  'Resin keycaps',
+  'Sewing project',
+  'Deliveries: Acqua Alta / Jay headphones / Superhi',
 ]
 
 const today = new Date()
@@ -39,7 +64,7 @@ const weekdays = [
 ]
 
 export const Agenda = () => {
-  const [display, setDisplay] = useState(displays[1])
+  const [display, setDisplay] = useState(displays[0])
   const [height, setHeight] = useState(150)
 
   return (
@@ -108,37 +133,57 @@ const Toggles = ({ type, setDisplay }) =>
 const Button = Component.grey4.pv10.ph25.bRad25.fs13.ml30.mono.div()
 
 const Weekdays = ({ display, height, setHeight }) => {
-  const { type, min, max } = display
-  const lines = type === 'lines'
+  const { type, min } = display
   const boxes = type === 'boxes'
-  const Test = (lines && Line) || (boxes && Box)
   return (
     <Div flex={boxes} flexWrap={boxes} justifyBetween={boxes}>
       {weekdays.map(({ day, tasks }, i) => (
-        <Test
-          key={day}
-          style={{ minHeight: `${min}px`, height: `${height}px` }}
-          className={boxes ? 'agenda-box' : ''}
-          w25p={boxes && i !== 6}
-          w50p={boxes && i === 6}
-          bt={lines && i !== 0}
-        >
-          <Div fs30>{day}</Div>
-          <Div mt45={boxes} mt30={lines} flex={lines}>
-            {tasks.map((task) => (
-              <Div mb20={boxes} mr70={lines} flex alignCenter>
-                <Dot />
-                <Div>{task}</Div>
-              </Div>
-            ))}
-          </Div>
-        </Test>
+        <Day
+          day={day}
+          tasks={tasks}
+          type={type}
+          min={min}
+          height={height}
+          i={i}
+        />
       ))}
+      <Day
+        day="Misc"
+        tasks={miscellaneous}
+        type={type}
+        min={min}
+        height={height}
+      />
     </Div>
   )
 }
 
-const Dot = Component.h15.w15.mr20.bRad50p.bgGrey9.shadowOut.div()
+const Day = ({ day, tasks, type, min, height, i }) => {
+  const lines = type === 'lines'
+  const boxes = type === 'boxes'
+  const Component = (lines && Line) || (boxes && Box)
+  return (
+    <Component
+      key={day}
+      style={{ minHeight: `${min}px`, height: `${height}px` }}
+      className={boxes ? 'agenda-box' : ''}
+      w25p={boxes}
+      bt={lines && i !== 0}
+    >
+      <Div fs30>{day}</Div>
+      <Div mt45={boxes} mt30={lines} flex={lines}>
+        {tasks.map((task) => (
+          <Div mb20={boxes} mr70={lines} flex>
+            <Dot />
+            <Div>{task}</Div>
+          </Div>
+        ))}
+      </Div>
+    </Component>
+  )
+}
+
+const Dot = Component.shrink0.h15.w15.mr20.bRad50p.bgGrey9.shadowOut.div()
 
 const Line = Component.pv20.bGrey5.div()
 const Box = Component.animShadow.pa30.bgGrey9.flex.flexColumn.alignFlexStart.div()
