@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Router } from '@reach/router'
 
 import { Div } from './lib/design.js'
@@ -11,13 +11,26 @@ import { recipes as data } from './recipes.data.js'
 import './App.css'
 
 const App = () => {
-  return (
-    <Router>
-      <Home path="/" />
-      <Agenda path="/agenda" />
-    </Router>
-  )
+  const [state, setState] = useState([])
+
+  const fetchData = async () => {
+    const response = await fetch('http://localhost:9000/test')
+    const data = await response.json()
+    if (!data) return
+    setState(data)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [state.length])
+
+  return <Div>{state.map((s) => s.title)}</Div>
 }
+
+// <Router>
+// <Home path="/" />
+// <Agenda path="/agenda" />
+// </Router>
 
 const Home = () => {
   const [filters, setFilters] = useState([])
