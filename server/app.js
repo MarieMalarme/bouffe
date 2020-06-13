@@ -9,8 +9,7 @@ const bodyParser = require('body-parser')
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 
-const recipes = require('./routes/recipes')
-const filters = require('./routes/filters')
+const generateRoutes = require('./routes/generateRoutes')
 
 var app = express()
 
@@ -28,11 +27,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+// routes
 app.use('/', indexRouter)
-// app.use('/users', usersRouter)
-
-app.use('/recipes', recipes)
-app.use('/filters', filters)
+app.use('/recipes', generateRoutes('recipes'))
+app.use('/filters', generateRoutes('filters'))
 
 app.use((request, response, next) => {
   console.log(request)
