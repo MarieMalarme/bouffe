@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 
 const recipes = require('./routes/recipes')
+const filters = require('./routes/filters')
 
 var app = express()
 
@@ -31,6 +32,7 @@ app.use('/', indexRouter)
 // app.use('/users', usersRouter)
 
 app.use('/recipes', recipes)
+app.use('/filters', filters)
 
 app.use((request, response, next) => {
   console.log(request)
