@@ -11,7 +11,7 @@ import { recipes as data } from './recipes.data.js'
 import './App.css'
 
 const post = (content, setState) => {
-  return fetch(`http://localhost:9000/test`, {
+  return fetch(`http://localhost:9000/recipes`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -27,7 +27,7 @@ const App = () => {
   const [state, setState] = useState([])
 
   const fetchData = async () => {
-    const response = await fetch('http://localhost:9000/test')
+    const response = await fetch('http://localhost:9000/recipes')
     const data = await response.json()
     if (!data) return
     setState(data)
@@ -38,7 +38,7 @@ const App = () => {
   }, [state.length])
 
   return (
-    <Div onClick={() => post({ id: 100, title: 'test test' }, setState)}>
+    <Div onClick={() => post({ id: 100, title: 'recipes recipes' }, setState)}>
       {state.map((s) => s.title)}
     </Div>
   )

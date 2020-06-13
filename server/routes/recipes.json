@@ -1,0 +1,118 @@
+[
+  {
+    "title": "Banana bread",
+    "specs": {
+      "time": "75min",
+      "temp": "180°",
+      "serving": 8
+    },
+    "tags": ["Sweet"],
+    "ingredients": [
+      {
+        "ingredient": "Flour",
+        "quantity": "250 g"
+      },
+      {
+        "ingredient": "Baking soda",
+        "quantity": "1 tsp"
+      },
+      {
+        "ingredient": "Salt",
+        "quantity": "1/4 tsp"
+      },
+      {
+        "ingredient": "Cinnamon",
+        "quantity": "1/2 tsp"
+      },
+      {
+        "ingredient": "Butter",
+        "quantity": "115 g"
+      },
+      {
+        "ingredient": "Brown sugar",
+        "quantity": "150 g"
+      },
+      {
+        "ingredient": "Eggs",
+        "quantity": "2"
+      },
+      {
+        "ingredient": "Yoghurt",
+        "quantity": "80 g"
+      },
+      {
+        "ingredient": "Ripe bananas",
+        "quantity": "4"
+      },
+      {
+        "ingredient": "Vanilla extract",
+        "quantity": "1 tsp"
+      },
+      {
+        "ingredient": "Nuts"
+      }
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "step": "Grease the mold"
+      },
+      {
+        "id": 2,
+        "step": "Put the butter to heat until liquid"
+      },
+      {
+        "id": 3,
+        "step": "Mash the bananas"
+      },
+      {
+        "id": 4,
+        "step": "Whisk the flour, baking soda, salt, and cinnamon in a bowl"
+      },
+      {
+        "id": 5,
+        "step": "In another bowl, beat the butter and brown sugar together until smooth and creamy"
+      },
+      {
+        "id": 6,
+        "step": "Add the eggs one at a time, beating continously"
+      },
+      {
+        "id": 7,
+        "step": "Add the yogurt, mashed bananas, and vanilla extract"
+      },
+      {
+        "id": 8,
+        "step": "Preheat the oven at 180°"
+      },
+      {
+        "id": 9,
+        "step": "Slowly combine the flour mix into the wet ingredients, beating until no flour pockets remain"
+      },
+      {
+        "id": 10,
+        "step": "Add the nuts"
+      },
+      {
+        "id": 11,
+        "step": "Put the mixture in the mold"
+      },
+      {
+        "id": 12,
+        "step": "Cook for 1h"
+      },
+      {
+        "id": 13,
+        "step": "Check the cooking - a knife coming out clean of the bread"
+      },
+      {
+        "id": 14,
+        "step": "Remove from the oven and let it cool"
+      },
+      {
+        "id": 15,
+        "step": "Enjoy and keep up to 2 days in a room, 1 week in the fridge"
+      }
+    ]
+  }
+]

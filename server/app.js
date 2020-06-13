@@ -9,7 +9,7 @@ const bodyParser = require('body-parser')
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 
-const test = require('./routes/test')
+const recipes = require('./routes/recipes')
 
 var app = express()
 
@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 // app.use('/users', usersRouter)
 
-app.use('/test', test)
+app.use('/recipes', recipes)
 
 app.use((request, response, next) => {
   console.log(request)
