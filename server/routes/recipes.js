@@ -5,7 +5,7 @@ const path = require('path')
 const readFile = util.promisify(fs.readFile)
 const writeFile = util.promisify(fs.writeFile)
 
-const filePath = path.join(__dirname, './test.json')
+const filePath = path.join(__dirname, './recipes.json')
 
 const router = express.Router()
 
