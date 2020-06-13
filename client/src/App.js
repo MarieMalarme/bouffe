@@ -10,6 +10,19 @@ import { recipes as data } from './recipes.data.js'
 
 import './App.css'
 
+const post = (content, setState) => {
+  return fetch(`http://localhost:9000/test`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(content),
+  })
+    .then((res) => res.json())
+    .then((res) => setState(res))
+}
+
 const App = () => {
   const [state, setState] = useState([])
 
@@ -24,7 +37,11 @@ const App = () => {
     fetchData()
   }, [state.length])
 
-  return <Div>{state.map((s) => s.title)}</Div>
+  return (
+    <Div onClick={() => post({ id: 100, title: 'test test' }, setState)}>
+      {state.map((s) => s.title)}
+    </Div>
+  )
 }
 
 // <Router>
