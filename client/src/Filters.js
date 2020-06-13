@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { fetchData } from './lib/data.js'
+
 import { Component, Div } from './lib/design.js'
 
-const filters = ['Salty', 'Sweet', 'Meat', 'Vegetarian', 'Asian', 'French']
+export const Filters = ({ setFilters }) => {
+  const [filtersList, setFiltersList] = useState([])
 
-export const Filters = ({ setFilters }) => (
-  <Div flex alignCenter flexWrap>
-    {filters.map((filter, i) => (
-      <Filter key={filter} name={filter} setFilters={setFilters} />
-    ))}
-  </Div>
-)
+  useEffect(() => {
+    fetchData('filters', setFiltersList)
+  }, [filtersList.length])
+
+  return (
+    <Div flex alignCenter flexWrap>
+      {filtersList.map((filter, i) => (
+        <Filter key={filter} name={filter} setFilters={setFilters} />
+      ))}
+    </Div>
+  )
+}
 
 const Filter = ({ name, isSelected = false, setFilters }) => {
   const [active, setActive] = useState(isSelected)
