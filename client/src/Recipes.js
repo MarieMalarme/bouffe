@@ -12,7 +12,7 @@ export const Recipes = ({ recipes, setRecipes }) =>
     <Recipe key={recipe.title} recipe={recipe} setRecipes={setRecipes} />
   ))
 
-const Recipe = ({ recipe, setRecipes }) => {
+const Recipe = ({ recipe, setRecipes, data, setData }) => {
   const [open, setOpen] = useState(false)
   const { title, ingredients, steps, specs, id } = recipe
   const className = open ? 'wrapper-open' : 'wrapper-closed'
@@ -25,6 +25,14 @@ const Recipe = ({ recipe, setRecipes }) => {
         <Div flex alignBaseline>
           <Title>{title}</Title>
           <Collapse open={open} />
+        </Div>
+        <Div
+          onClick={() => {
+            setData(recipe)
+            setOpen({ editing: true })
+          }}
+        >
+          Edit
         </Div>
         <Div
           onClick={() => {

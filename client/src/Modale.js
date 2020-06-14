@@ -15,24 +15,24 @@ const stages = [
   { name: 'steps', content: 'orders', required: true },
 ]
 
-export const Modale = ({ data, setData, open, setOpen, setRecipes }) => {
-  const { clicked, hovered } = open
+export const Modale = ({ data, setData, modale, setModale, setRecipes }) => {
+  const { editing, hovering } = modale
 
   return (
     <FixedContainer
-      o100={clicked || hovered}
-      o0={!clicked && !hovered}
-      justifyFlexEnd={hovered}
-      noEvents={!clicked && !hovered}
+      o100={editing || hovering}
+      o0={!editing && !hovering}
+      justifyFlexEnd={hovering}
+      noEvents={!editing && !hovering}
     >
       <Form
         data={data}
         setData={setData}
-        setOpen={setOpen}
+        setModale={setModale}
         setRecipes={setRecipes}
-        clicked={clicked}
+        editing={editing}
       />
-      {hovered && <HoverMessage />}
+      {hovering && <HoverMessage />}
     </FixedContainer>
   )
 }
@@ -48,7 +48,7 @@ const HoverMessage = () => (
   </Div>
 )
 
-const Form = ({ data, setData, setOpen, setRecipes, clicked }) => {
+const Form = ({ data, setData, setModale, setRecipes, editing }) => {
   const [current, setCurrent] = useState(stages[0])
 
   const index = stages.indexOf(current)
@@ -63,16 +63,16 @@ const Form = ({ data, setData, setOpen, setRecipes, clicked }) => {
   const submit = () => {
     sendData('post', 'recipes', data, setRecipes)
     setCurrent(stages[0])
-    setOpen({ clicked: false, hovered: false })
+    setModale({ editing: false, hovering: false })
   }
 
   return (
-    <Div flex flexColumn justifyBetween h100p o100={clicked} o0={!clicked}>
+    <Div flex flexColumn justifyBetween h100p o100={editing} o0={!editing}>
       <Stages
         autoComplete="off"
         onKeyDown={(e) => {
           const { enter, backspace, esc } = key(e)
-          if (esc) setOpen({ clicked: false, hovered: false })
+          if (esc) setModale({ editing: false, hovering: false })
           if (backspace) prev()
           if (enter) last ? submit() : next()
         }}

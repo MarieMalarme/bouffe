@@ -9,7 +9,9 @@ import { Recipes } from './Recipes.js'
 export const Home = () => {
   const [filters, setFilters] = useState([])
   const [recipes, setRecipes] = useState([])
+
   const [data, setData] = useState({})
+  const [modale, setModale] = useState({ editing: false, hovering: false })
 
   useEffect(() => {
     fetchData('recipes', setRecipes)
@@ -36,8 +38,15 @@ export const Home = () => {
         setFilters={setFilters}
         recipes={recipes}
         setRecipes={setRecipes}
+        modale={modale}
+        setModale={setModale}
       />
-      <Recipes recipes={displayed.reverse()} setRecipes={setRecipes} />
+      <Recipes
+        recipes={displayed.reverse()}
+        setRecipes={setRecipes}
+        data={data}
+        setData={setData}
+      />
     </Div>
   )
 }
