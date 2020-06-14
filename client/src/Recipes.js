@@ -1,16 +1,20 @@
 import React, { useState, useRef } from 'react'
+
+import { sendData } from './lib/data.js'
 import { Component, Div } from './lib/design.js'
 
 import { Specs } from './Specs.js'
 import { Ingredients } from './Ingredients.js'
 import { Steps } from './Steps.js'
 
-export const Recipes = ({ recipes }) =>
-  recipes.map((recipe) => <Recipe key={recipe.title} recipe={recipe} />)
+export const Recipes = ({ recipes, setRecipes }) =>
+  recipes.map((recipe) => (
+    <Recipe key={recipe.title} recipe={recipe} setRecipes={setRecipes} />
+  ))
 
-const Recipe = ({ recipe }) => {
+const Recipe = ({ recipe, setRecipes }) => {
   const [open, setOpen] = useState(false)
-  const { title, ingredients, steps, specs } = recipe
+  const { title, ingredients, steps, specs, id } = recipe
   const className = open ? 'wrapper-open' : 'wrapper-closed'
   const ref = useRef(null)
   const height = ref.current && ref.current.getBoundingClientRect().height
@@ -21,6 +25,13 @@ const Recipe = ({ recipe }) => {
         <Div flex alignBaseline>
           <Title>{title}</Title>
           <Collapse open={open} />
+        </Div>
+        <Div
+          onClick={() => {
+            sendData('delete', 'recipes', { id }, setRecipes)
+          }}
+        >
+          Delete
         </Div>
         <Specs specs={specs} />
       </Tab>

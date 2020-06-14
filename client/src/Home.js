@@ -34,7 +34,7 @@ export const Home = () => {
         recipes={recipes}
         setRecipes={setRecipes}
       />
-      <Recipes recipes={displayed.reverse()} />
+      <Recipes recipes={displayed.reverse()} setRecipes={setRecipes} />
     </Div>
   )
 }
