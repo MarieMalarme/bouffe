@@ -1,12 +1,15 @@
 [
   {
+    "id": 1,
     "title": "Banana bread",
     "specs": {
       "time": "75min",
       "temp": "180°",
       "serving": 8
     },
-    "tags": ["Sweet"],
+    "tags": [
+      "Sweet"
+    ],
     "ingredients": [
       {
         "ingredient": "Flour",

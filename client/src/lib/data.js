@@ -5,9 +5,9 @@ export const fetchData = async (path, setState) => {
   setState(data)
 }
 
-export const postData = (path, data, setState) => {
+export const sendData = (method, path, data, setState) => {
   return fetch(`http://localhost:9000/${path}`, {
-    method: 'POST',
+    method: method.toUpperCase(),
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

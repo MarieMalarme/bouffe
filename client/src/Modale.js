@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { postData } from './lib/data.js'
+import { sendData } from './lib/data.js'
 import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
@@ -48,7 +48,9 @@ const Form = ({ stages, setEvent, recipes, setRecipes }) => {
   const first = index === 0
   const last = index + 1 === stages.length
 
-  const [data, setData] = useState({})
+  const id = Math.max(...recipes.map((r) => r.id)) + 1
+
+  const [data, setData] = useState({ id })
 
   const filled = data[current.name]
   const missing = current.required && !filled
@@ -56,7 +58,7 @@ const Form = ({ stages, setEvent, recipes, setRecipes }) => {
   const next = () => (missing ? warn(current) : setCurrent(stages[index + 1]))
   const prev = () => !first && setCurrent(stages[index - 1])
   const submit = () => {
-    postData('recipes', data, setRecipes)
+    sendData('post', 'recipes', data, setRecipes)
     setCurrent(stages[0])
     setEvent()
   }
