@@ -7,10 +7,17 @@ import { Modale } from './Modale.js'
 
 const body = document.querySelector('body')
 
-export const Controls = ({ filters, setFilters, recipes, setRecipes }) => {
-  const [event, setEvent] = useState()
+export const Controls = ({
+  data,
+  setData,
+  filters,
+  setFilters,
+  recipes,
+  setRecipes,
+}) => {
+  const [open, setOpen] = useState({ clicked: false, hovered: false })
 
-  body.style.overflow = event ? 'hidden' : 'auto'
+  body.style.overflow = open ? 'hidden' : 'auto'
 
   const filter = (target) =>
     filters.includes(target)
@@ -20,12 +27,20 @@ export const Controls = ({ filters, setFilters, recipes, setRecipes }) => {
   return (
     <Bar className="gradient-bg">
       <Filters setFilters={(target) => filter(target)} />
-      <New event={event} setEvent={setEvent} />
+      <New
+        recipes={recipes}
+        setData={setData}
+        data={data}
+        open={open}
+        setOpen={setOpen}
+      />
       <Modale
-        event={event}
-        setEvent={setEvent}
+        open={open}
+        setOpen={setOpen}
         recipes={recipes}
         setRecipes={setRecipes}
+        data={data}
+        setData={setData}
       />
     </Bar>
   )
@@ -33,16 +48,23 @@ export const Controls = ({ filters, setFilters, recipes, setRecipes }) => {
 
 const Bar = Component.flex.justifyBetween.sticky.pb60.pt80.t0.mb20.w100p.div()
 
-const New = ({ event, setEvent }) => {
-  const clicked = event === 'click'
+const New = ({ recipes, data, setData, open, setOpen }) => {
+  const { clicked } = open
+
   return (
     <Button
-      className="new-button"
       bgGrey9={clicked}
       shadowOut={clicked}
-      onMouseOver={() => !clicked && setEvent('hover')}
-      onMouseLeave={() => !clicked && setEvent()}
-      onClick={() => setEvent(clicked ? '' : 'click')}
+      onMouseEnter={() => !clicked && setOpen({ hovered: true })}
+      onMouseLeave={() => !clicked && setOpen({ hovered: false })}
+      onClick={() => {
+        const emptyData = !Object.values(data).length
+        if (emptyData) {
+          const id = Math.max(...recipes.map((r) => r.id)) + 1
+          setData({ id })
+        }
+        setOpen({ clicked: !clicked, hovered: false })
+      }}
     >
       <Plus
         anim
