@@ -9,6 +9,7 @@ import { Recipes } from './Recipes.js'
 export const Home = () => {
   const [filters, setFilters] = useState([])
   const [recipes, setRecipes] = useState([])
+  const [data, setData] = useState({})
 
   useEffect(() => {
     fetchData('recipes', setRecipes)
@@ -29,6 +30,8 @@ export const Home = () => {
   return (
     <Div ph100 pb100 pt30>
       <Controls
+        data={data}
+        setData={setData}
         filters={filters}
         setFilters={setFilters}
         recipes={recipes}

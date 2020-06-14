@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { sendData } from './lib/data.js'
 import { capitalize, key } from './lib/toolbox.js'
 
-import { Component, Div } from './lib/design.js'
+import { Component, Div, FixedContainer } from './lib/design.js'
 import { Filters } from './Filters.js'
 import { NumberInput, TextInput, BulletsInput, warn } from './Inputs.js'
 
@@ -15,42 +15,45 @@ const stages = [
   { name: 'steps', content: 'orders', required: true },
 ]
 
-export const Modale = ({ event, setEvent, recipes, setRecipes }) => {
-  const clicked = event === 'click'
-  const hovered = event === 'hover'
+export const Modale = ({ data, setData, open, setOpen, setRecipes }) => {
+  const { clicked, hovered } = open
 
   return (
-    <Wrapper
-      justifyFlexEnd={!clicked}
-      noEvents={!clicked}
-      o100={event}
-      o0={!event}
+    <FixedContainer
+      o100={clicked || hovered}
+      o0={!clicked && !hovered}
+      justifyFlexEnd={hovered}
+      noEvents={!clicked && !hovered}
     >
-      {clicked && (
-        <Form
-          stages={stages}
-          setEvent={setEvent}
-          recipes={recipes}
-          setRecipes={setRecipes}
-        />
-      )}
-      {hovered && <Hovered />}
-    </Wrapper>
+      <Form
+        data={data}
+        setData={setData}
+        setOpen={setOpen}
+        setRecipes={setRecipes}
+        clicked={clicked}
+      />
+      {hovered && <HoverMessage />}
+    </FixedContainer>
   )
 }
 
-const Wrapper = Component.flex.justifyFlexEnd.flexColumn.w100vw.h100vh.fixed.bgGrey9.t0.l0.animOpacity.pa100.fs60.div()
+const HoverMessage = () => (
+  <Div lh80>
+    <Div grey7>
+      Time to try new tasty food
+      <br />
+      and make that list longer
+    </Div>
+    Click to add a new recipe
+  </Div>
+)
 
-const Form = ({ stages, setEvent, recipes, setRecipes }) => {
+const Form = ({ data, setData, setOpen, setRecipes, clicked }) => {
   const [current, setCurrent] = useState(stages[0])
 
   const index = stages.indexOf(current)
   const first = index === 0
   const last = index + 1 === stages.length
-
-  const id = Math.max(...recipes.map((r) => r.id)) + 1
-
-  const [data, setData] = useState({ id })
 
   const filled = data[current.name]
   const missing = current.required && !filled
@@ -60,16 +63,16 @@ const Form = ({ stages, setEvent, recipes, setRecipes }) => {
   const submit = () => {
     sendData('post', 'recipes', data, setRecipes)
     setCurrent(stages[0])
-    setEvent()
+    setOpen({ clicked: false, hovered: false })
   }
 
   return (
-    <Div flex flexColumn justifyBetween h100p>
+    <Div flex flexColumn justifyBetween h100p o100={clicked} o0={!clicked}>
       <Stages
         autoComplete="off"
         onKeyDown={(e) => {
           const { enter, backspace, esc } = key(e)
-          if (esc) setEvent()
+          if (esc) setOpen({ clicked: false, hovered: false })
           if (backspace) prev()
           if (enter) last ? submit() : next()
         }}
@@ -168,14 +171,3 @@ const Stage = ({ stage, current, data, setData }) => {
 }
 
 const Label = Component.fixed.heading.fs60.div()
-
-const Hovered = () => (
-  <Div lh80>
-    <Div grey7>
-      Time to try new tasty food
-      <br />
-      and make that list longer
-    </Div>
-    Click to add a new recipe
-  </Div>
-)
