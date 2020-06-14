@@ -4,3 +4,16 @@ export const fetchData = async (path, setState) => {
   if (!data) return
   setState(data)
 }
+
+export const postData = (path, data, setState) => {
+  return fetch(`http://localhost:9000/${path}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((res) => setState(res))
+}

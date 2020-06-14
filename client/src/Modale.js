@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+
+import { postData } from './lib/data.js'
 import { capitalize, key } from './lib/toolbox.js'
 
 import { Component, Div } from './lib/design.js'
@@ -54,7 +56,7 @@ const Form = ({ stages, setEvent, recipes, setRecipes }) => {
   const next = () => (missing ? warn(current) : setCurrent(stages[index + 1]))
   const prev = () => !first && setCurrent(stages[index - 1])
   const submit = () => {
-    setRecipes([...recipes, { ...data }])
+    postData('recipes', data, setRecipes)
     setCurrent(stages[0])
     setEvent()
   }
