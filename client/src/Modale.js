@@ -87,6 +87,7 @@ const Form = ({
       { ...data, published: true },
       setRecipes,
     )
+    setData({})
     setCurrent(stages[0])
     setModale({ fulfilling: false, hovering: false })
   }
@@ -104,7 +105,10 @@ const Form = ({
         autoComplete="off"
         onKeyDown={(e) => {
           const { enter, backspace, esc } = key(e)
-          if (esc) setModale({ fulfilling: false, hovering: false })
+          if (esc) {
+            editing && setData({})
+            setModale({ editing: false, fulfilling: false, hovering: false })
+          }
           if (backspace) prev()
           if (enter) last ? submit() : next()
         }}
