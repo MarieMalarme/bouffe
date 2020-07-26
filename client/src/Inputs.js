@@ -16,6 +16,7 @@ export const TextInput = ({ name, required, data, setData, ...rest }) => (
       }
       type="text"
       name={name}
+      value={data[name]}
       id={`input-${name}`}
       pb15
       bb
@@ -29,7 +30,7 @@ export const TextInput = ({ name, required, data, setData, ...rest }) => (
 
 const NumberInputStyle = Component.current.bgNone.textCenter.w200.fs100.input()
 export const NumberInput = ({ name, current, data, setData, ...rest }) => {
-  const [count, setCount] = useState(45)
+  const [count, setCount] = useState(data[name] || 45)
 
   useEffect(() => {
     if (current.name !== name) return
@@ -62,8 +63,13 @@ const Counter = Component.noSelect.w100p.flex.alignCenter.flexColumn.div()
 const Numero = Component.flex.justifyCenter.div()
 
 export const BulletsInput = ({ name, data, setData, required, type }) => {
+  const hasData = data[name] && Object.values(data[name]).length
+  const dataIndexes = hasData && [
+    ...Array(Object.values(data[name]).length).keys(),
+  ]
+
   const [reference, setReference] = useState(null)
-  const [bullets, setBullets] = useState([0])
+  const [bullets, setBullets] = useState(dataIndexes || [0])
   const [click, setClick] = useState(false)
 
   const key = name.slice(0, -1)
@@ -71,7 +77,7 @@ export const BulletsInput = ({ name, data, setData, required, type }) => {
   useEffect(() => {
     if (bullets.length > 1) return
     const first = document.getElementById(`bullet-${name}-${bullets[0]}`)
-    first.focus()
+    first && first.focus()
   })
 
   const none = !data[name] || (data[name] && data[name].every((d) => !d[key]))
@@ -102,6 +108,7 @@ export const BulletsInput = ({ name, data, setData, required, type }) => {
         {bullets.map((i) => (
           <Bullet
             key={`bullet-${name}-${i}`}
+            data={data}
             name={name}
             remove={remove}
             update={update}
@@ -134,10 +141,14 @@ export const BulletsInput = ({ name, data, setData, required, type }) => {
 
 const Bullets = Component.absolute.flex.flexWrap.justifyBetween.alignFlexStart.w100p.noScrollbar.t0.ofScroll.div()
 
-const Bullet = ({ name, remove, update, bullets, setClick, type, i }) => {
+const Bullet = ({ data, name, remove, update, bullets, setClick, type, i }) => {
   const single = bullets.length === 1
   const numbers = type === 'numbers'
-  const index = bullets.indexOf(i) + 1
+  const index = bullets.indexOf(i)
+
+  const isIngredient = name === 'ingredients'
+  const hasData = data[name] && data[name][index]
+  const elem = hasData && ((isIngredient && hasData.ingredient) || hasData.step)
 
   return (
     <Div flex alignCenter mb25 w45p={!numbers} w100p={numbers}>
@@ -146,6 +157,7 @@ const Bullet = ({ name, remove, update, bullets, setClick, type, i }) => {
         autoFocus
         type="text"
         name={name}
+        defaultValue={elem}
         id={`bullet-${name}-${i}`}
         placeholder={`Gimme some${single ? 'thing' : ' more'}`}
         onChange={(e) => {

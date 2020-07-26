@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 
 import { sendData } from './lib/data.js'
 import { Component, Div } from './lib/design.js'
@@ -7,41 +7,40 @@ import { Specs } from './Specs.js'
 import { Ingredients } from './Ingredients.js'
 import { Steps } from './Steps.js'
 
-export const Recipes = ({ recipes, setRecipes }) =>
+export const Recipes = ({ recipes, setRecipes, setData, setModale }) =>
   recipes.map((recipe) => (
-    <Recipe key={recipe.title} recipe={recipe} setRecipes={setRecipes} />
+    <Recipe
+      key={recipe.title}
+      recipe={recipe}
+      setRecipes={setRecipes}
+      setData={setData}
+      setModale={setModale}
+    />
   ))
 
-const Recipe = ({ recipe, setRecipes, data, setData }) => {
+const Recipe = ({ recipe, setRecipes, setData, setModale }) => {
   const [open, setOpen] = useState(false)
-  const { title, ingredients, steps, specs, id } = recipe
+  const { title, ingredients, steps, specs } = recipe
   const className = open ? 'wrapper-open' : 'wrapper-closed'
-  const ref = useRef(null)
-  const height = ref.current && ref.current.getBoundingClientRect().height
+  const [content, setContent] = useState(null)
+  const height = content && content.getBoundingClientRect().height
 
   return (
     <Wrapper className={className} pb70={open}>
-      <Tab onClick={() => setOpen(!open)}>
-        <Div flex alignBaseline>
+      <Tab>
+        <TabOpener onClick={() => setOpen(!open)}>
           <Title>{title}</Title>
           <Collapse open={open} />
+        </TabOpener>
+        <Div flex alignCenter>
+          <Buttons
+            recipe={recipe}
+            setData={setData}
+            setModale={setModale}
+            setRecipes={setRecipes}
+          />
+          <Specs specs={specs} />
         </Div>
-        <Div
-          onClick={() => {
-            setData(recipe)
-            setOpen({ editing: true })
-          }}
-        >
-          Edit
-        </Div>
-        <Div
-          onClick={() => {
-            sendData('delete', 'recipes', { id }, setRecipes)
-          }}
-        >
-          Delete
-        </Div>
-        <Specs specs={specs} />
       </Tab>
       <Content
         o0={!open}
@@ -52,14 +51,41 @@ const Recipe = ({ recipe, setRecipes, data, setData }) => {
           marginLeft: '-10px',
         }}
       >
-        <div ref={ref}>
+        <Div elemRef={setContent}>
           <Ingredients ingredients={ingredients} />
           <Steps steps={steps} />
-        </div>
+        </Div>
       </Content>
     </Wrapper>
   )
 }
+
+const Buttons = ({ recipe, setData, setModale, setRecipes }) => {
+  const { id } = recipe
+  return (
+    <Div flex alignCenter mr50 pr50 br>
+      <Button
+        text="Edit"
+        onClick={() => {
+          setData(recipe)
+          setModale({ editing: true, fulfilling: true })
+        }}
+      />
+      <Button
+        text="Delete"
+        onClick={() => {
+          sendData('delete', 'recipes', { id }, setRecipes)
+        }}
+      />
+    </Div>
+  )
+}
+
+const Button = ({ text, onClick }) => (
+  <Div ml50 pointer onClick={onClick}>
+    {text}
+  </Div>
+)
 
 const Collapse = ({ open }) => (
   <Div fs12 mono>
@@ -69,5 +95,6 @@ const Collapse = ({ open }) => (
 
 const Wrapper = Component.bGrey6.w100p.mb30.animShadow.pb25.div()
 const Title = Component.fs60.heading.mr20.div()
-const Tab = Component.flex.justifyBetween.alignCenter.pointer.div()
+const Tab = Component.flex.justifyBetween.alignCenter.div()
+const TabOpener = Component.w100p.pointer.flex.alignBaseline.div()
 const Content = Component.fs20.anim.pl10.div()

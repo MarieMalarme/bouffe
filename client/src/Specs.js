@@ -5,7 +5,7 @@ import { Clock, Oven, Serving } from './Icons.js'
 export const Specs = ({ specs }) => {
   if (!specs) return null
   return (
-    <Div flex alignCenter justifyFlexEnd w50p mr20>
+    <Div flex alignCenter justifyFlexEnd mr20>
       {Object.entries(specs).map(([key, spec]) => (
         <Spec key={key} type={key} spec={spec} />
       ))}

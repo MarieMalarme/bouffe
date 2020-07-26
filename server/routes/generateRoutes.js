@@ -19,7 +19,7 @@ const generateRoutes = (name) => {
   })
 
   router.post('/', (req, res, next) => handleData(req, res, next, utils))
-
+  router.put('/', (req, res, next) => handleData(req, res, next, utils))
   router.delete('/', (req, res, next) => handleData(req, res, next, utils))
 
   return router
@@ -28,14 +28,17 @@ const generateRoutes = (name) => {
 const handleData = (req, res, next, utils) => {
   const { filePath, readFile, writeFile } = utils
 
+  const updating = req.method === 'PUT'
   const deleting = req.method === 'DELETE'
   const posting = req.method === 'POST'
 
   readFile(filePath, 'utf8')
     .then(JSON.parse)
     .then(async (data) => {
+      const kept = data.filter((d) => d.id !== req.body.id)
       data =
-        (deleting && data.filter((d) => d.id !== req.body.id)) ||
+        (deleting && kept) ||
+        (updating && [...kept, req.body]) ||
         (posting && [...data, req.body]) ||
         data
       const content = JSON.stringify(data, null, 2)
