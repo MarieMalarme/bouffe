@@ -30,11 +30,29 @@ export const TextInput = ({ name, required, data, setData, ...rest }) => (
 
 const NumberInputStyle = Component.current.bgNone.textCenter.w200.fs100.input()
 export const NumberInput = ({ name, current, data, setData, ...rest }) => {
-  const [count, setCount] = useState(data[name] || 45)
+  const time = name === 'time'
+  const temp = name === 'temp'
+  const serving = name === 'serving'
+
+  const num =
+    data.specs &&
+    data.specs[name] &&
+    String(data.specs[name]).replace(/[^0-9]/g, '')
+
+  const defaultNum = (time && 45) || (temp && 180) || (serving && 4) || 10
+
+  const [count, setCount] = useState(num || defaultNum)
+
+  const symbol = (time && 'min') || (temp && '°') || ''
+  const unit =
+    (time && 'minutes') || (temp && 'degrees') || (serving && 'servings')
 
   useEffect(() => {
     if (current.name !== name) return
-    setData({ ...data, [name]: count })
+    setData({
+      ...data,
+      ['specs']: { ...data['specs'], [name]: `${count}${symbol}` },
+    })
   }, [current, count, name])
 
   return (
@@ -53,7 +71,7 @@ export const NumberInput = ({ name, current, data, setData, ...rest }) => {
         <Plus onClick={() => setCount(count + 1)} pointer width={50} ml20 />
       </Numero>
       <Div grey6 ml10>
-        min
+        {unit}
       </Div>
     </Counter>
   )
