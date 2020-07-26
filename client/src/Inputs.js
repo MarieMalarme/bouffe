@@ -63,13 +63,11 @@ const Counter = Component.noSelect.w100p.flex.alignCenter.flexColumn.div()
 const Numero = Component.flex.justifyCenter.div()
 
 export const BulletsInput = ({ name, data, setData, required, type }) => {
-  const hasData = data[name] && Object.values(data[name]).length
-  const dataIndexes = hasData && [
-    ...Array(Object.values(data[name]).length).keys(),
-  ]
+  const existingData = data[name] && Object.values(data[name]).length
+  const indexes = existingData && [...Array(existingData + 1).keys()].slice(1)
 
   const [reference, setReference] = useState(null)
-  const [bullets, setBullets] = useState(dataIndexes || [0])
+  const [bullets, setBullets] = useState(indexes || [1])
   const [click, setClick] = useState(false)
 
   const key = name.slice(0, -1)
@@ -152,7 +150,7 @@ const Bullet = ({ data, name, remove, update, bullets, setClick, type, i }) => {
 
   return (
     <Div flex alignCenter mb25 w45p={!numbers} w100p={numbers}>
-      <Lister numbers={numbers} index={index} />
+      <Lister numbers={numbers} index={index + 1} />
       <TextInputStyle
         autoFocus
         type="text"

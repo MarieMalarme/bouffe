@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { sendData } from './lib/data.js'
 import { Component, Div } from './lib/design.js'
@@ -23,7 +23,12 @@ const Recipe = ({ recipe, setRecipes, setData, setModale }) => {
   const { title, ingredients, steps, specs } = recipe
   const className = open ? 'wrapper-open' : 'wrapper-closed'
   const [content, setContent] = useState(null)
-  const height = content && content.getBoundingClientRect().height
+  const [height, setHeight] = useState(null)
+
+  useEffect(() => {
+    if (!content) return
+    setHeight(content.getBoundingClientRect().height)
+  }, [recipe, content])
 
   return (
     <Wrapper className={className} pb70={open}>
