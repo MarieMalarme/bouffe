@@ -16,22 +16,33 @@ const stages = [
 ]
 
 export const Modale = ({ data, setData, modale, setModale, setRecipes }) => {
-  const { editing, hovering } = modale
+  const { editing, fulfilling, hovering } = modale
+  const [current, setCurrent] = useState(stages[0])
+
+  useEffect(() => {
+    if (editing || !data.title) {
+      setCurrent(stages[0])
+    }
+  }, [editing, data.title])
 
   return (
     <FixedContainer
-      o100={editing || hovering}
-      o0={!editing && !hovering}
+      o100={fulfilling || hovering}
+      o0={!fulfilling && !hovering}
       justifyFlexEnd={hovering}
-      noEvents={!editing && !hovering}
+      noEvents={!fulfilling && !hovering}
     >
-      <Form
-        data={data}
-        setData={setData}
-        setModale={setModale}
-        setRecipes={setRecipes}
-        editing={editing}
-      />
+      {fulfilling && (
+        <Form
+          current={current}
+          setCurrent={setCurrent}
+          data={data}
+          setData={setData}
+          modale={modale}
+          setModale={setModale}
+          setRecipes={setRecipes}
+        />
+      )}
       {hovering && <HoverMessage />}
     </FixedContainer>
   )
@@ -48,8 +59,16 @@ const HoverMessage = () => (
   </Div>
 )
 
-const Form = ({ data, setData, setModale, setRecipes, editing }) => {
-  const [current, setCurrent] = useState(stages[0])
+const Form = ({
+  current,
+  setCurrent,
+  data,
+  setData,
+  modale,
+  setModale,
+  setRecipes,
+}) => {
+  const { editing, fulfilling } = modale
 
   const index = stages.indexOf(current)
   const first = index === 0
@@ -60,19 +79,32 @@ const Form = ({ data, setData, setModale, setRecipes, editing }) => {
 
   const next = () => (missing ? warn(current) : setCurrent(stages[index + 1]))
   const prev = () => !first && setCurrent(stages[index - 1])
+
   const submit = () => {
-    sendData('post', 'recipes', data, setRecipes)
+    sendData(
+      editing ? 'put' : 'post',
+      'recipes',
+      { ...data, published: true },
+      setRecipes,
+    )
     setCurrent(stages[0])
-    setModale({ editing: false, hovering: false })
+    setModale({ fulfilling: false, hovering: false })
   }
 
   return (
-    <Div flex flexColumn justifyBetween h100p o100={editing} o0={!editing}>
+    <Div
+      flex
+      flexColumn
+      justifyBetween
+      h100p
+      o100={fulfilling}
+      o0={!fulfilling}
+    >
       <Stages
         autoComplete="off"
         onKeyDown={(e) => {
           const { enter, backspace, esc } = key(e)
-          if (esc) setModale({ editing: false, hovering: false })
+          if (esc) setModale({ fulfilling: false, hovering: false })
           if (backspace) prev()
           if (enter) last ? submit() : next()
         }}
@@ -106,8 +138,6 @@ const Button = ({ display, action, text, ...props }) => {
     </Div>
   )
 }
-
-const Navigation = Component.flex.alignCenter.w100p.mt50.div()
 
 const Stage = ({ stage, current, data, setData }) => {
   const [ref, setRef] = useState()
@@ -170,4 +200,5 @@ const Stage = ({ stage, current, data, setData }) => {
   )
 }
 
+const Navigation = Component.flex.alignCenter.w100p.mt50.div()
 const Label = Component.fixed.heading.fs60.div()

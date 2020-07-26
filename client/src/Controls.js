@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Component } from './lib/design.js'
 import { Filters } from './Filters.js'
@@ -17,7 +17,8 @@ export const Controls = ({
   modale,
   setModale,
 }) => {
-  body.style.overflow = modale ? 'hidden' : 'auto'
+  const { fulfilling, hovering } = modale
+  body.style.overflow = fulfilling || hovering ? 'hidden' : 'auto'
 
   const filter = (target) =>
     filters.includes(target)
@@ -49,29 +50,39 @@ export const Controls = ({
 const Bar = Component.flex.justifyBetween.sticky.pb60.pt80.t0.mb20.w100p.div()
 
 const New = ({ recipes, data, setData, modale, setModale }) => {
-  const { editing } = modale
+  const { fulfilling, editing } = modale
 
   return (
     <Button
-      bgGrey9={editing}
-      shadowOut={editing}
-      onMouseEnter={() => !editing && setModale({ hovering: true })}
-      onMouseLeave={() => !editing && setModale({ hovering: false })}
+      bgGrey9={fulfilling}
+      shadowOut={fulfilling}
+      onMouseEnter={() => !fulfilling && setModale({ hovering: true })}
+      onMouseLeave={() => !fulfilling && setModale({ hovering: false })}
       onClick={() => {
         const emptyData = !Object.values(data).length
         if (emptyData) {
           const id = Math.max(...recipes.map((r) => r.id)) + 1
           setData({ id })
         }
-        setModale({ editing: !editing, hovering: false })
+
+        if (editing) {
+          setData({})
+          setModale({ editing: false, fulfilling: false, hovering: false })
+          return
+        }
+
+        setModale({
+          fulfilling: !fulfilling,
+          hovering: false,
+        })
       }}
     >
       <Plus
         anim
         width={20}
         strokeWidth={7}
-        stroke={editing ? 'black' : 'white'}
-        style={{ transform: `rotate(${editing ? 45 : 0}deg)` }}
+        stroke={fulfilling ? 'black' : 'white'}
+        style={{ transform: `rotate(${fulfilling ? 45 : 0}deg)` }}
       />
     </Button>
   )

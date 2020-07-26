@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "published": true,
     "title": "Banana bread",
     "specs": {
       "time": "75min",

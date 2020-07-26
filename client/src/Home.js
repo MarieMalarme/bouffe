@@ -11,7 +11,11 @@ export const Home = () => {
   const [recipes, setRecipes] = useState([])
 
   const [data, setData] = useState({})
-  const [modale, setModale] = useState({ editing: false, hovering: false })
+  const [modale, setModale] = useState({
+    editing: false,
+    fulfilling: false,
+    hovering: false,
+  })
 
   useEffect(() => {
     fetchData('recipes', setRecipes)
@@ -46,6 +50,7 @@ export const Home = () => {
         setRecipes={setRecipes}
         data={data}
         setData={setData}
+        setModale={setModale}
       />
     </Div>
   )
