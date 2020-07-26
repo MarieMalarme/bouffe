@@ -10,7 +10,9 @@ import { NumberInput, TextInput, BulletsInput, warn } from './Inputs.js'
 const stages = [
   { name: 'title', content: 'text', required: true },
   { name: 'ingredients', content: 'bullets', required: true },
-  { name: 'time', content: 'number' },
+  { name: 'time', content: 'number', label: 'Cooking Time' },
+  { name: 'temp', content: 'number', label: 'Temperature' },
+  { name: 'serving', content: 'number', label: 'Servings' },
   { name: 'tags', content: 'tags' },
   { name: 'steps', content: 'orders', required: true },
 ]
@@ -151,7 +153,7 @@ const Stage = ({ stage, current, data, setData }) => {
     ref.focus()
   })
 
-  const { name, content, required } = stage
+  const { name, label, content, required } = stage
 
   const text = content === 'text'
   const number = content === 'number'
@@ -187,7 +189,7 @@ const Stage = ({ stage, current, data, setData }) => {
 
   return (
     <Div hidden={name !== current.name} h100p mt160>
-      <Label className="fade-in">{capitalize(name)}</Label>
+      <Label className="fade-in">{capitalize(label || name)}</Label>
       <Div h100p={list} relative={list} ofHidden={list}>
         <Content
           name={name}
